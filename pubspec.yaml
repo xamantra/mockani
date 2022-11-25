@@ -11,6 +11,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  
+  shared_preferences: 2.0.15
+  kana_kit: 2.0.0
+  http: 0.13.5
+  intl: 0.17.0
+  timeago: 3.3.0
+  provider: 6.0.4
 
 dev_dependencies:
   flutter_test:
