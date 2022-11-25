@@ -57,9 +57,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       return Column(
                         children: [
-                          Text(
-                            "${summaryProvider.getTotalReviews} total reviews",
-                            style: Theme.of(context).textTheme.bodyLarge,
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "${summaryProvider.getTotalReviews} total reviews",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(width: 12),
+                              ElevatedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "Review all",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              )
+                            ],
                           ),
                           const SizedBox(height: 32),
                           Expanded(

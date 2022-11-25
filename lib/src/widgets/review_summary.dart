@@ -45,10 +45,18 @@ class ReviewSummary extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Text(
-              "in ${timeago.format(review.availableAt, allowFromNow: true).replaceAll("from now", "").trim()}",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            review.isAvailableNow
+                ? ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Review now",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  )
+                : Text(
+                    "in ${timeago.format(review.availableAt, allowFromNow: true).replaceAll("from now", "").trim()}",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
           ],
         ),
       ),

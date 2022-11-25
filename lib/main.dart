@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => SummaryProvider(wanikaniRepository)),
       ],
       child: MaterialApp(
-        title: 'Mockani',
+        title: 'Mock Reviews for WaniKani',
         themeMode: ThemeMode.dark,
         theme: ThemeData(
           primarySwatch: Colors.pink,

@@ -121,6 +121,10 @@ class Review {
     return DateTime.parse(available_at).toLocal();
   }
 
+  bool get isAvailableNow {
+    return DateTime.now().isAfter(availableAt);
+  }
+
   Review({
     required this.available_at,
     required this.subject_ids,
