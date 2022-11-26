@@ -6,6 +6,7 @@ import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/screens/home.dart';
 import 'package:mockani/src/screens/login.dart';
+import 'package:mockani/src/screens/review.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       primaryBackground: Color(0xffFFFFFF),
       secondaryBackground: Color(0xffF3F3F3),
       tertiaryBackground: Color(0xffE5E5E5),
+      onBackground: Color(0xff333333),
       primary: Color(0xffF52BA7),
       success: Color(0xff88CC00),
       danger: Color(0xffFF0033),
@@ -43,6 +45,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.pink,
           brightness: Brightness.light,
           backgroundColor: customTheme.primaryBackground,
+          scaffoldBackgroundColor: customTheme.primaryBackground,
           useMaterial3: true,
         ).copyWith(
           primaryColor: customTheme.primary,
@@ -52,6 +55,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.pink,
           brightness: Brightness.dark,
           backgroundColor: const Color(0xff252A3A),
+          scaffoldBackgroundColor: const Color(0xff252A3A),
           useMaterial3: true,
         ).copyWith(
           primaryColor: customTheme.primary,
@@ -60,6 +64,7 @@ class MyApp extends StatelessWidget {
               primaryBackground: const Color(0xff252A3A),
               secondaryBackground: const Color(0xff252526),
               tertiaryBackground: const Color(0xff333333),
+              onBackground: Color(0xffE8EAED),
             ),
           ],
         ),
@@ -68,6 +73,8 @@ class MyApp extends StatelessWidget {
         routes: {
           LOGIN_ROUTE: (_) => LoginScreen(),
           HOME_ROUTE: (_) => const HomeScreen(),
+          REVIEW_ROUTE: (_) => const ReviewScreen(all: false),
+          REVIEW_ALL_ROUTE: (_) => const ReviewScreen(all: true),
         },
       ),
     );

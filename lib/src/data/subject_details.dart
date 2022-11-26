@@ -22,6 +22,13 @@ class SubjectDetails {
     return data.readings.where((r) => r.accepted_answer).map((e) => e.reading.toLowerCase()).toList();
   }
 
+  CharacterImage? get getCharacterImage {
+    if (data.character_images.isNotEmpty) {
+      return data.character_images.firstWhere((x) => x.inlineStyles && x.content_type.contains("svg+xml"));
+    }
+    return null;
+  }
+
   bool get isRadical => object == "radical";
 
   SubjectDetails({
@@ -103,6 +110,7 @@ class SubjectItemDetails {
   final List<Reading> readings;
   final List<int> component_subject_ids;
   final List<int> amalgamation_subject_ids;
+  final List<CharacterImage> character_images;
   final String meaning_mnemonic;
   final String meaning_hint;
   final String reading_mnemonic;
@@ -120,6 +128,7 @@ class SubjectItemDetails {
     required this.readings,
     required this.component_subject_ids,
     required this.amalgamation_subject_ids,
+    required this.character_images,
     required this.meaning_mnemonic,
     required this.meaning_hint,
     required this.reading_mnemonic,
@@ -136,6 +145,7 @@ class SubjectItemDetails {
     String? characters,
     List<Meaning>? meanings,
     List<AuxiliaryMeaning>? auxiliary_meanings,
+    List<CharacterImage>? character_images,
     List<Reading>? readings,
     List<int>? component_subject_ids,
     List<int>? amalgamation_subject_ids,
@@ -154,6 +164,7 @@ class SubjectItemDetails {
       characters: characters ?? this.characters,
       meanings: meanings ?? this.meanings,
       auxiliary_meanings: auxiliary_meanings ?? this.auxiliary_meanings,
+      character_images: character_images ?? this.character_images,
       readings: readings ?? this.readings,
       component_subject_ids: component_subject_ids ?? this.component_subject_ids,
       amalgamation_subject_ids: amalgamation_subject_ids ?? this.amalgamation_subject_ids,
@@ -176,6 +187,7 @@ class SubjectItemDetails {
     result.addAll({'characters': characters});
     result.addAll({'meanings': meanings.map((x) => x.toMap()).toList()});
     result.addAll({'auxiliary_meanings': auxiliary_meanings.map((x) => x.toMap()).toList()});
+    result.addAll({'character_images': character_images.map((x) => x.toMap()).toList()});
     result.addAll({'readings': readings.map((x) => x.toMap()).toList()});
     result.addAll({'component_subject_ids': component_subject_ids});
     result.addAll({'amalgamation_subject_ids': amalgamation_subject_ids});
@@ -198,6 +210,7 @@ class SubjectItemDetails {
       characters: map['characters'] ?? '',
       meanings: List<Meaning>.from(map['meanings']?.map((x) => Meaning.fromMap(x)) ?? []),
       auxiliary_meanings: List<AuxiliaryMeaning>.from(map['auxiliary_meanings']?.map((x) => AuxiliaryMeaning.fromMap(x)) ?? []),
+      character_images: List<CharacterImage>.from(map['character_images']?.map((x) => CharacterImage.fromMap(x)) ?? []),
       readings: List<Reading>.from(map['readings']?.map((x) => Reading.fromMap(x)) ?? []),
       component_subject_ids: List<int>.from(map['component_subject_ids'] ?? []),
       amalgamation_subject_ids: List<int>.from(map['amalgamation_subject_ids'] ?? []),
@@ -451,4 +464,71 @@ class Reading {
   int get hashCode {
     return type.hashCode ^ primary.hashCode ^ reading.hashCode ^ accepted_answer.hashCode;
   }
+}
+
+class CharacterImage {
+  final String url;
+  final String content_type;
+  final Map<String, dynamic> metadata;
+
+  bool get inlineStyles {
+    try {
+      return metadata["inline_styles"] ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  CharacterImage({
+    required this.url,
+    required this.content_type,
+    required this.metadata,
+  });
+
+  CharacterImage copyWith({
+    String? url,
+    String? content_type,
+    Map<String, dynamic>? metadata,
+  }) {
+    return CharacterImage(
+      url: url ?? this.url,
+      content_type: content_type ?? this.content_type,
+      metadata: metadata ?? this.metadata,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'url': url});
+    result.addAll({'content_type': content_type});
+    result.addAll({'metadata': metadata});
+
+    return result;
+  }
+
+  factory CharacterImage.fromMap(Map<String, dynamic> map) {
+    return CharacterImage(
+      url: map['url'] ?? '',
+      content_type: map['content_type'] ?? '',
+      metadata: map['metadata'] ?? {},
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CharacterImage.fromJson(String source) => CharacterImage.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'Character_image(url: $url, content_type: $content_type)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CharacterImage && other.url == url && other.content_type == content_type;
+  }
+
+  @override
+  int get hashCode => url.hashCode ^ content_type.hashCode;
 }

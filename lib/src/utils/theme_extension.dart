@@ -4,6 +4,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
   final Color primaryBackground;
   final Color secondaryBackground;
   final Color tertiaryBackground;
+  final Color onBackground;
 
   // WaniKani colors
   final Color primary;
@@ -17,6 +18,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
     required this.primaryBackground,
     required this.secondaryBackground,
     required this.tertiaryBackground,
+    required this.onBackground,
     required this.primary,
     required this.success,
     required this.danger,
@@ -30,6 +32,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
     Color? primaryBackground,
     Color? secondaryBackground,
     Color? tertiaryBackground,
+    Color? onBackground,
     Color? primary,
     Color? success,
     Color? danger,
@@ -41,6 +44,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
       primaryBackground: primaryBackground ?? this.primaryBackground,
       secondaryBackground: secondaryBackground ?? this.secondaryBackground,
       tertiaryBackground: tertiaryBackground ?? this.tertiaryBackground,
+      onBackground: onBackground ?? this.onBackground,
       primary: primary ?? this.primary,
       success: success ?? this.success,
       danger: danger ?? this.danger,
@@ -60,6 +64,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
       primaryBackground: Color.lerp(primaryBackground, other.primaryBackground, t)!,
       secondaryBackground: Color.lerp(secondaryBackground, other.secondaryBackground, t)!,
       tertiaryBackground: Color.lerp(tertiaryBackground, other.tertiaryBackground, t)!,
+      onBackground: Color.lerp(onBackground, other.onBackground, t)!,
       primary: Color.lerp(primary, other.primary, t)!,
       success: Color.lerp(success, other.success, t)!,
       danger: Color.lerp(danger, other.danger, t)!,
@@ -67,6 +72,19 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
       kanji: Color.lerp(kanji, other.kanji, t)!,
       vocabulary: Color.lerp(vocabulary, other.vocabulary, t)!,
     );
+  }
+
+  Color getColorFrom(String subjectType) {
+    switch (subjectType) {
+      case "kanji":
+        return kanji;
+      case "radical":
+        return radical;
+      case "vocabulary":
+        return vocabulary;
+      default:
+        return kanji;
+    }
   }
 }
 

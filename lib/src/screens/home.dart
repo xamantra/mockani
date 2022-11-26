@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
+import 'package:mockani/src/widgets/circular_loading.dart';
 import 'package:mockani/src/widgets/profile_widget.dart';
 import 'package:mockani/src/widgets/review_summary.dart';
 import 'package:provider/provider.dart';
@@ -47,13 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     stream: summaryProvider.stream,
                     builder: (context, snapshot) {
                       if (summaryProvider.loading) {
-                        return const Center(
-                          child: SizedBox(
-                            width: 32,
-                            height: 32,
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
+                        return const CircularLoading();
                       }
                       return Column(
                         children: [
@@ -66,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(width: 12),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, REVIEW_ALL_ROUTE);
+                                },
                                 child: Text(
                                   "Review all",
                                   style: Theme.of(context).textTheme.bodySmall,

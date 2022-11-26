@@ -10,14 +10,16 @@ class ReviewProvider {
   final StreamController<ReviewProvider> _state = StreamController.broadcast();
   Stream<ReviewProvider> get stream => _state.stream;
 
-  bool loadingMore = false;
-  List<SubjectDetails> passedItems = [];
   Summary? summary;
   List<int> shuffledReviews = [];
   List<int> loadedIds = [];
 
-  /// This is the variable that should be used in the UI.
+  /// This is the variables that should be used in the UI.
+  bool loadingMore = true;
   List<SubjectDetails> reviewSubjects = [];
+  SubjectDetails get getCurrent => reviewSubjects[0];
+  bool get completed => shuffledReviews.length == results.length;
+  Map<int, bool> results = {};
 
   ReviewProvider(this.repository);
 
@@ -36,12 +38,24 @@ class ReviewProvider {
   }
 
   bool isPassed(int id) {
-    return passedItems.any((element) => element.id == id);
+    return results[id] ?? false;
   }
 
-  void passItem(int id) {
-    passedItems.add(reviewSubjects.firstWhere((element) => element.id == id));
+  void saveResult(int id, bool correct) {
+    results[id] = correct;
+    reviewSubjects.removeWhere((r) => r.id == id);
+    _state.add(this);
     loadItems();
+  }
+
+  bool answerMeaning(SubjectDetails item, String answer) {
+    final matched = item.getMeaningAnswers.any((a) => a.toLowerCase() == answer.toLowerCase());
+    return matched;
+  }
+
+  bool answerReading(SubjectDetails item, String answer) {
+    final matched = item.getReadingAnswers.any((a) => a.toLowerCase() == answer.toLowerCase());
+    return matched;
   }
 
   /// Load 3 review items per call.
@@ -61,6 +75,7 @@ class ReviewProvider {
         reviewSubjects.add(await repository.getSubjectDetail(id));
         loadedIds.add(id);
         loaded++;
+        _state.add(this);
       } else {
         continue;
       }
