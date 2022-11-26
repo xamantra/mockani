@@ -18,8 +18,10 @@ class ReviewProvider {
   bool loadingMore = true;
   List<SubjectDetails> reviewSubjects = [];
   SubjectDetails get getCurrent => reviewSubjects[0];
-  bool get completed => shuffledReviews.length == results.length && !loadingMore;
+  bool get completed => shuffledReviews.length == results.length && fullyLoaded;
   Map<int, bool> results = {};
+
+  bool fullyLoaded = false;
 
   ReviewProvider(this.repository);
 
@@ -45,7 +47,10 @@ class ReviewProvider {
     results[id] = correct;
     reviewSubjects.removeWhere((r) => r.id == id);
     _state.add(this);
-    loadItems();
+
+    if (!fullyLoaded) {
+      loadItems();
+    }
   }
 
   bool answerMeaning(SubjectDetails item, String answer) {
@@ -75,6 +80,9 @@ class ReviewProvider {
         reviewSubjects.add(await repository.getSubjectDetail(id));
         loadedIds.add(id);
         loaded++;
+        if (i == shuffledReviews.length - 1) {
+          fullyLoaded = true;
+        }
         _state.add(this);
       } else {
         continue;

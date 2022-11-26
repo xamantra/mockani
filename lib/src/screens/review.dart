@@ -56,16 +56,28 @@ class _ReviewScreenState extends State<ReviewScreen> {
               body: Builder(
                 builder: (context) {
                   if (provider.completed) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
-                          },
-                          child: const Text("HOME"),
-                        ),
-                      ],
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Completed mock review",
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          const SizedBox(height: 36),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                            },
+                            child: Text(
+                              "HOME",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }
                   if (provider.loadingMore && provider.reviewSubjects.isEmpty) {
