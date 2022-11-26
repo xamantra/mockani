@@ -7,6 +7,7 @@ import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject_details.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
+import 'package:mockani/src/utils/extension.dart';
 import 'package:mockani/src/utils/kana_kit.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:mockani/src/widgets/alert_widget.dart';
@@ -327,7 +328,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
       // check for spelling error
       final distance = <String, double>{};
       for (final m in item.getMeaningAnswers) {
-        distance[m] = answer.similarityTo(m) * 100;
+        distance[m] = answer.similarity(m) * 100;
+        final alt = m.similarity(answer) * 100;
+        if (alt > (distance[m] ?? 0.0)) {
+          distance[m] = alt;
+        }
       }
 
       final closest = (distance.values.toList()..sort((a, b) => b.compareTo(a))).first;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
-import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/screens/home.dart';
@@ -63,7 +62,7 @@ class MyApp extends StatelessWidget {
               primaryBackground: const Color(0xff252A3A),
               secondaryBackground: const Color(0xff252526),
               tertiaryBackground: const Color(0xff333333),
-              onBackground: Color(0xffE8EAED),
+              onBackground: const Color(0xffE8EAED),
             ),
           ],
         ),
