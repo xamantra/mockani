@@ -222,6 +222,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                             inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
                                           } else {
                                             if (value.isNotEmpty && value[value.length - 1] == "n") return;
+                                            if (startsOrEndsWith(value, "ny")) return;
                                             inputController.text = toHiragana(value);
                                             inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
                                           }

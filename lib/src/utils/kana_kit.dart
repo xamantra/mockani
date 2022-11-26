@@ -14,3 +14,8 @@ bool isDoubleNN(String input) {
   final last2nd = last - 1;
   return str[last] == "n" && str[last2nd] == "n";
 }
+
+/// Does the current input starts or ends with `other`.
+bool startsOrEndsWith(String input, String other) {
+  return input == other || input.endsWith(other);
+}
