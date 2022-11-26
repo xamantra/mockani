@@ -43,3 +43,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 scraper/wanikani.dart
+test/token.dart

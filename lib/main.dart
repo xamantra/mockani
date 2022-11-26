@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
+import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/screens/home.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider(create: (_) => AuthProvider(wanikaniRepository)),
         Provider(create: (_) => SummaryProvider(wanikaniRepository)),
+        Provider(create: (_) => ReviewProvider(wanikaniRepository)),
       ],
       child: MaterialApp(
         title: 'Mock Reviews for WaniKani',
