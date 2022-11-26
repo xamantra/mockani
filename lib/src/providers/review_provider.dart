@@ -18,7 +18,7 @@ class ReviewProvider {
   bool loadingMore = true;
   List<SubjectDetails> reviewSubjects = [];
   SubjectDetails get getCurrent => reviewSubjects[0];
-  bool get completed => shuffledReviews.length == results.length && fullyLoaded;
+  bool get completed => shuffledReviews.length == results.values.where((correct) => correct).length && fullyLoaded;
   Map<int, bool> results = {};
 
   bool fullyLoaded = false;
@@ -46,10 +46,21 @@ class ReviewProvider {
   void saveResult(int id, bool correct) {
     results[id] = correct;
     reviewSubjects.removeWhere((r) => r.id == id);
+    reAddMistakes();
     _state.add(this);
 
     if (!fullyLoaded) {
       loadItems();
+    }
+  }
+
+  void reAddMistakes() {
+    final hasMistake = results.values.any((correct) => !correct);
+    if (reviewSubjects.isEmpty && fullyLoaded && hasMistake) {
+      shuffledReviews = results.entries.where((item) => !item.value).map((e) => e.key).toList();
+      fullyLoaded = false;
+      loadedIds = [];
+      results = {};
     }
   }
 

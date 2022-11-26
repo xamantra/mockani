@@ -32,6 +32,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   bool answerMeaning = Random().nextBool();
   bool correctMeaning = false;
   bool correctReading = false;
+  bool commitedMistake = false;
   bool get answeredCurrentItem => correctMeaning && correctReading;
 
   List<SubjectDetails> answeredItems = [];
@@ -290,6 +291,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     answerMeaning = Random().nextBool();
     correctMeaning = false;
     correctReading = false;
+    commitedMistake = false;
 
     clearErrors();
 
@@ -316,6 +318,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             clearErrors();
             answerMeaning = !answerMeaning;
           } else {
+            commitedMistake = true;
             checkMeaning(item, answer);
           }
         }
@@ -329,13 +332,18 @@ class _ReviewScreenState extends State<ReviewScreen> {
             clearErrors();
             answerMeaning = !answerMeaning;
           } else {
+            commitedMistake = true;
             checkReading(item, answer);
           }
         }
       }
 
       if (answeredCurrentItem || (correctMeaning && item.isRadical)) {
-        reviewProvider.saveResult(item.id, answeredCurrentItem);
+        if (item.isRadical) {
+          reviewProvider.saveResult(item.id, correctMeaning);
+        } else {
+          reviewProvider.saveResult(item.id, answeredCurrentItem && !commitedMistake);
+        }
         resetStates();
       }
     });
