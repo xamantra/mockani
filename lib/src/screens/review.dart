@@ -365,6 +365,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   void checkReading(SubjectDetails item, String answer) {
     if (!correctReading) {
+      warning = null;
       answers = item.getReadingAnswers;
     }
   }
