@@ -12,15 +12,17 @@ class SubjectDetails {
   final String data_updated_at;
   final SubjectItemDetails data;
 
-  List<MeaningInterface> get getMeaningAnswers {
-    final meanings = data.meanings.where((m) => m.accepted_answer);
-    final alternatives = data.auxiliary_meanings.where((a) => a.type == "whitelisted");
-    return (meanings as Iterable<MeaningInterface>).toList()..addAll((alternatives as Iterable<MeaningInterface>)..toList());
+  List<String> get getMeaningAnswers {
+    final meanings = data.meanings.where((m) => m.accepted_answer).map((e) => e.answer.toLowerCase());
+    final alternatives = data.auxiliary_meanings.where((a) => a.type == "whitelisted").map((e) => e.answer.toLowerCase());
+    return meanings.toList()..addAll(alternatives..toList());
   }
 
-  List<Reading> get getReadingAnswers {
-    return data.readings.where((r) => r.accepted_answer).toList();
+  List<String> get getReadingAnswers {
+    return data.readings.where((r) => r.accepted_answer).map((e) => e.reading.toLowerCase()).toList();
   }
+
+  bool get isRadical => object == "radical";
 
   SubjectDetails({
     required this.id,
