@@ -79,6 +79,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         child: (item.getCharacterImage != null) && item.data.characters.isEmpty
                             ? SvgPicture.network(
                                 item.getCharacterImage!.url,
+                                color: Colors.white,
                                 height: 128,
                                 width: 128,
                               )
