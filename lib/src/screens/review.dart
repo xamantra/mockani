@@ -170,57 +170,64 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                               ),
                                         ),
                                   const SizedBox(height: 24),
-                                  TextFormField(
-                                    controller: inputController,
-                                    focusNode: focusNode,
-                                    maxLines: 1,
-                                    minLines: 1,
-                                    textAlign: TextAlign.center,
-                                    textAlignVertical: TextAlignVertical.center,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: item.isRadical
-                                          ? "Meaning"
-                                          : answerMeaning
-                                              ? "Meaning"
-                                              : "Reading",
-                                      hintStyle: TextStyle(
-                                        color: theme.onBackground.withOpacity(0.1),
+                                  Theme(
+                                    data: Theme.of(context).copyWith(
+                                      textSelectionTheme: TextSelectionThemeData(
+                                        selectionColor: theme.getColorFrom(item.object).withOpacity(0.8),
+                                      ),
+                                    ),
+                                    child: TextFormField(
+                                      controller: inputController,
+                                      focusNode: focusNode,
+                                      maxLines: 1,
+                                      minLines: 1,
+                                      textAlign: TextAlign.center,
+                                      textAlignVertical: TextAlignVertical.center,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: item.isRadical
+                                            ? "Radical Name"
+                                            : answerMeaning
+                                                ? "Meaning"
+                                                : "Reading",
+                                        hintStyle: TextStyle(
+                                          color: theme.onBackground.withOpacity(0.3),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 48,
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        color: theme.onBackground,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 48,
                                       ),
-                                    ),
-                                    style: TextStyle(
-                                      color: theme.onBackground,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 48,
-                                    ),
-                                    cursorColor: theme.getColorFrom(item.object),
-                                    onFieldSubmitted: (value) {
-                                      if (value.isNotEmpty) {
-                                        submit(item, value);
-                                      }
-                                      focusNode.requestFocus();
-                                    },
-                                    onSaved: (value) {
-                                      if (value != null && value.isNotEmpty) {
-                                        submit(item, value);
-                                      }
-                                      focusNode.requestFocus();
-                                    },
-                                    onChanged: (value) {
-                                      if (!answerMeaning) {
-                                        if (item.isRadical) return;
-                                        if (isDoubleNN(value)) {
-                                          inputController.text = toHiragana(value.substring(0, value.length - 1));
-                                          inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
-                                        } else {
-                                          if (value.isNotEmpty && value[value.length - 1] == "n") return;
-                                          inputController.text = toHiragana(value);
-                                          inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
+                                      cursorColor: theme.getColorFrom(item.object),
+                                      onFieldSubmitted: (value) {
+                                        if (value.isNotEmpty) {
+                                          submit(item, value);
                                         }
-                                      }
-                                    },
+                                        focusNode.requestFocus();
+                                      },
+                                      onSaved: (value) {
+                                        if (value != null && value.isNotEmpty) {
+                                          submit(item, value);
+                                        }
+                                        focusNode.requestFocus();
+                                      },
+                                      onChanged: (value) {
+                                        if (!answerMeaning) {
+                                          if (item.isRadical) return;
+                                          if (isDoubleNN(value)) {
+                                            inputController.text = toHiragana(value.substring(0, value.length - 1));
+                                            inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
+                                          } else {
+                                            if (value.isNotEmpty && value[value.length - 1] == "n") return;
+                                            inputController.text = toHiragana(value);
+                                            inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
+                                          }
+                                        }
+                                      },
+                                    ),
                                   ),
                                   Container(
                                     margin: const EdgeInsets.symmetric(vertical: 24),
