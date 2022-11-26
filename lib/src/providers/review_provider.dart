@@ -18,7 +18,7 @@ class ReviewProvider {
   bool loadingMore = true;
   List<SubjectDetails> reviewSubjects = [];
   SubjectDetails get getCurrent => reviewSubjects[0];
-  bool get completed => shuffledReviews.length == results.length;
+  bool get completed => shuffledReviews.length == results.length && !loadingMore;
   Map<int, bool> results = {};
 
   ReviewProvider(this.repository);

@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider(create: (_) => AuthProvider(wanikaniRepository)),
         Provider(create: (_) => SummaryProvider(wanikaniRepository)),
-        Provider(create: (_) => ReviewProvider(wanikaniRepository)),
       ],
       child: MaterialApp(
         title: 'Mock Reviews for WaniKani',

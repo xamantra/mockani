@@ -14,7 +14,7 @@ class SubjectDetails {
 
   List<String> get getMeaningAnswers {
     final meanings = data.meanings.where((m) => m.accepted_answer).map((e) => e.answer.toLowerCase());
-    final alternatives = data.auxiliary_meanings.where((a) => a.type == "whitelisted").map((e) => e.answer.toLowerCase());
+    final alternatives = data.auxiliary_meanings.where((a) => a.type == "whitelist").map((e) => e.answer.toLowerCase());
     return meanings.toList()..addAll(alternatives..toList());
   }
 

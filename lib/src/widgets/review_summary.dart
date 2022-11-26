@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/summary.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -47,7 +48,9 @@ class ReviewSummary extends StatelessWidget {
             const Spacer(),
             review.isAvailableNow
                 ? ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, REVIEW_ROUTE);
+                    },
                     child: Text(
                       "Review now",
                       style: Theme.of(context).textTheme.bodySmall,
