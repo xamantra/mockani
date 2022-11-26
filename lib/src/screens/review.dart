@@ -305,22 +305,32 @@ class _ReviewScreenState extends State<ReviewScreen> {
   void submit(SubjectDetails item, String answer) {
     setState(() {
       if (answerMeaning || item.isRadical) {
-        correctMeaning = reviewProvider.answerMeaning(item, answer);
-        if (correctMeaning) {
-          inputController.clear();
-          clearErrors();
-          answerMeaning = !answerMeaning;
+        if (isInputMixed(answer)) {
+          warning = "Kindly double check your answer. Kana-romaji mixed.";
+        } else if (isKana(answer)) {
+          warning = "We want the meaning.";
         } else {
-          checkMeaning(item, answer);
+          correctMeaning = reviewProvider.answerMeaning(item, answer);
+          if (correctMeaning) {
+            inputController.clear();
+            clearErrors();
+            answerMeaning = !answerMeaning;
+          } else {
+            checkMeaning(item, answer);
+          }
         }
       } else {
-        correctReading = reviewProvider.answerReading(item, answer);
-        if (correctReading) {
-          inputController.clear();
-          clearErrors();
-          answerMeaning = !answerMeaning;
+        if (isInputMixed(answer) || isRomaji(answer)) {
+          warning = "Kindly double check your answer. Either kana-romaji mixed or purely romaji.";
         } else {
-          checkReading(item, answer);
+          correctReading = reviewProvider.answerReading(item, answer);
+          if (correctReading) {
+            inputController.clear();
+            clearErrors();
+            answerMeaning = !answerMeaning;
+          } else {
+            checkReading(item, answer);
+          }
         }
       }
 

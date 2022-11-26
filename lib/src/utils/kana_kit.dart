@@ -6,6 +6,19 @@ String toHiragana(String romaji) {
   return kana.toHiragana(romaji);
 }
 
+/// Mixed with kana and romaji
+bool isInputMixed(String value) {
+  return kana.isMixed(value);
+}
+
+bool isKana(String value) {
+  return kana.isKana(value);
+}
+
+bool isRomaji(String value) {
+  return kana.isRomaji(value);
+}
+
 /// Does the current input end with two nn.
 bool isDoubleNN(String input) {
   final str = input.toLowerCase();
