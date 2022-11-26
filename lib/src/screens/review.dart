@@ -9,9 +9,11 @@ import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/utils/kana_kit.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
+import 'package:mockani/src/widgets/alert_widget.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
 import 'package:mockani/src/widgets/review_counter.dart';
 import 'package:provider/provider.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({super.key, required this.all});
@@ -24,6 +26,7 @@ class ReviewScreen extends StatefulWidget {
 
 class _ReviewScreenState extends State<ReviewScreen> {
   final reviewProvider = ReviewProvider(const WanikaniRepository());
+  late final theme = getCustomTheme(context);
 
   bool answerMeaning = Random().nextBool();
   bool correctMeaning = false;
@@ -31,6 +34,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
   bool get answeredCurrentItem => correctMeaning && correctReading;
 
   List<SubjectDetails> answeredItems = [];
+
+  String? error;
+  String? warning;
+
+  /// If the user answers incorrectly. It will show all accepted answers.
+  List<String> answers = [];
 
   TextEditingController inputController = TextEditingController();
   FocusNode focusNode = FocusNode();
@@ -44,7 +53,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = getCustomTheme(context);
     return Provider(
       create: (_) => reviewProvider,
       child: Builder(builder: (context) {
@@ -152,6 +160,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               Column(
                                 children: [
                                   const SizedBox(height: 24),
+                                  answers.isEmpty
+                                      ? const SizedBox()
+                                      : Text(
+                                          "Incorrect",
+                                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                color: theme.danger,
+                                              ),
+                                        ),
+                                  const SizedBox(height: 24),
                                   TextFormField(
                                     controller: inputController,
                                     focusNode: focusNode,
@@ -204,7 +221,38 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                       }
                                     },
                                   ),
-                                  const Spacer(),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 24),
+                                    child: Builder(
+                                      builder: (context) {
+                                        var alerts = <String>[];
+                                        if (error != null) {
+                                          alerts.add(error!);
+                                        } else if (warning != null) {
+                                          alerts.add(warning!);
+                                        } else if (answers.isNotEmpty) {
+                                          alerts.addAll(answers);
+                                        }
+                                        return AlertWidget(
+                                          color: theme.getColorFrom(item.object),
+                                          alerts: alerts,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      child: const AbsorbPointer(
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        focusNode.requestFocus();
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                               Align(
@@ -234,7 +282,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
     correctMeaning = false;
     correctReading = false;
 
+    clearErrors();
+
     inputController.clear();
+  }
+
+  void clearErrors() {
+    warning = null;
+    error = null;
+    answers = [];
   }
 
   void submit(SubjectDetails item, String answer) {
@@ -243,13 +299,19 @@ class _ReviewScreenState extends State<ReviewScreen> {
         correctMeaning = reviewProvider.answerMeaning(item, answer);
         if (correctMeaning) {
           inputController.clear();
+          clearErrors();
           answerMeaning = !answerMeaning;
+        } else {
+          checkMeaning(item, answer);
         }
       } else {
         correctReading = reviewProvider.answerReading(item, answer);
         if (correctReading) {
           inputController.clear();
+          clearErrors();
           answerMeaning = !answerMeaning;
+        } else {
+          checkReading(item, answer);
         }
       }
 
@@ -258,5 +320,29 @@ class _ReviewScreenState extends State<ReviewScreen> {
         resetStates();
       }
     });
+  }
+
+  void checkMeaning(SubjectDetails item, String answer) async {
+    if (!correctMeaning) {
+      // check for spelling error
+      final distance = <String, double>{};
+      for (final m in item.getMeaningAnswers) {
+        distance[m] = answer.similarityTo(m) * 100;
+      }
+
+      final closest = (distance.values.toList()..sort((a, b) => b.compareTo(a))).first;
+      if (closest >= 70) {
+        warning = "Check your spelling ...";
+      } else {
+        warning = null;
+        answers = item.getMeaningAnswers;
+      }
+    }
+  }
+
+  void checkReading(SubjectDetails item, String answer) {
+    if (!correctReading) {
+      answers = item.getReadingAnswers;
+    }
   }
 }
