@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/data/summary.dart';
@@ -11,12 +12,12 @@ class ReviewProvider {
   Stream<ReviewProvider> get stream => _state.stream;
 
   Summary? summary;
-  List<int> shuffledReviews = [];
+  List<int> reviewIds = [];
 
   bool loading = false;
   List<SubjectData> reviewSubjects = [];
   SubjectData get getCurrent => reviewSubjects[0];
-  bool get completed => shuffledReviews.length == results.values.where((correct) => correct).length;
+  bool get completed => reviewIds.length == results.values.where((correct) => correct).length;
   Map<int, bool> results = {};
 
   bool nothingToReview = false;
@@ -24,7 +25,15 @@ class ReviewProvider {
   ReviewProvider(this.repository);
 
   Future<void> init(bool isAll) async {
+    if (reviewIds.isNotEmpty) return;
+
+    loading = true;
+    _state.add(this);
+
     summary = await repository.getSummary();
+
+    loading = false;
+    _state.add(this);
 
     final reviews = summary?.getReviews ?? [];
     if (reviews.isEmpty) {
@@ -33,9 +42,9 @@ class ReviewProvider {
     }
 
     if (isAll) {
-      shuffledReviews = reviews.expand((r) => r.subject_ids).toSet().toList()..shuffle();
+      reviewIds = reviews.expand((r) => r.subject_ids).toSet().toList();
     } else {
-      shuffledReviews = reviews.where((x) => x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList()..shuffle();
+      reviewIds = reviews.where((x) => x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
     }
 
     if (reviews.isNotEmpty) {
@@ -57,7 +66,7 @@ class ReviewProvider {
   void reAddMistakes() {
     final hasMistake = results.values.any((correct) => !correct);
     if (reviewSubjects.isEmpty && hasMistake) {
-      shuffledReviews = results.entries.where((item) => !item.value).map((e) => e.key).toList();
+      reviewIds = results.entries.where((item) => !item.value).map((e) => e.key).toList();
       results = {};
       loadItems();
     }
@@ -79,7 +88,9 @@ class ReviewProvider {
     loading = true;
     _state.add(this);
 
-    reviewSubjects = await repository.getSubjects(ids: shuffledReviews);
+    final seed = Random(DateTime.now().millisecondsSinceEpoch);
+
+    reviewSubjects = (await repository.getSubjects(ids: reviewIds))..shuffle(seed);
 
     loading = false;
     _state.add(this);

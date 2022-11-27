@@ -273,7 +273,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               Align(
                                 alignment: Alignment.bottomRight,
                                 child: ReviewCounter(
-                                  totalCount: provider.shuffledReviews.length,
+                                  totalCount: provider.reviewIds.length,
                                   reviewedCount: provider.results.length,
                                 ),
                               ),
