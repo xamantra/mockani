@@ -13,7 +13,7 @@ class ReviewProvider {
   Summary? summary;
   List<int> shuffledReviews = [];
 
-  bool loading = true;
+  bool loading = false;
   List<SubjectData> reviewSubjects = [];
   SubjectData get getCurrent => reviewSubjects[0];
   bool get completed => shuffledReviews.length == results.values.where((correct) => correct).length;
@@ -74,6 +74,8 @@ class ReviewProvider {
   }
 
   Future<void> loadItems() async {
+    if (loading) return;
+
     loading = true;
     _state.add(this);
 

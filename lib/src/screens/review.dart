@@ -6,6 +6,7 @@ import 'package:jovial_svg/jovial_svg.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/providers/review_provider.dart';
+import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/utils/extension.dart';
 import 'package:mockani/src/utils/kana_kit.dart';
@@ -25,8 +26,9 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
+  late final themeProvider = Provider.of<ThemeProvider>(context);
   final reviewProvider = ReviewProvider(const WanikaniRepository());
-  late final theme = getCustomTheme(context);
+  late CustomTheme theme;
 
   bool answerMeaning = Random().nextBool();
   bool correctMeaning = false;
@@ -50,6 +52,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
     super.didChangeDependencies();
 
     reviewProvider.init(widget.all);
+
+    theme = getCustomTheme(context);
   }
 
   @override
@@ -275,21 +279,43 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               ),
                               Align(
                                 alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(24),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
-                                    },
-                                    tooltip: "Back home",
-                                    icon: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.home,
-                                        size: 18,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                                        },
+                                        tooltip: "Back home",
+                                        icon: Icon(
+                                          Icons.home,
+                                          size: 18,
+                                          color: theme.onBackground,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          themeProvider.switchTheme();
+                                        },
+                                        tooltip: "Switch theme",
+                                        icon: StreamBuilder(
+                                          stream: themeProvider.stream,
+                                          builder: (context, snapshot) {
+                                            return Icon(
+                                              themeProvider.darkMode ? Icons.dark_mode : Icons.light_mode,
+                                              size: 18,
+                                              color: theme.onBackground,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

@@ -38,6 +38,8 @@ class SummaryProvider {
   }
 
   Future<void> fetchSummary() async {
+    if (loading) return;
+
     loading = true;
     _state.add(this);
 

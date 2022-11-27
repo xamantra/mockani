@@ -18,6 +18,8 @@ class AuthProvider {
   }
 
   Future<void> login([String? token]) async {
+    if (loading) return;
+
     loading = true;
     _state.add(this);
 
