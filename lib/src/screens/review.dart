@@ -273,6 +273,25 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                   reviewedCount: provider.results.length,
                                 ),
                               ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                                    },
+                                    tooltip: "Back home",
+                                    icon: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.home,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

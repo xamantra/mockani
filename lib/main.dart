@@ -40,26 +40,32 @@ class MyApp extends StatelessWidget {
         title: 'Mock Reviews for WaniKani',
         themeMode: ThemeMode.dark,
         theme: ThemeData(
-          primarySwatch: Colors.pink,
           brightness: Brightness.light,
           backgroundColor: customTheme.primaryBackground,
           scaffoldBackgroundColor: customTheme.primaryBackground,
+          cardTheme: CardTheme(
+            color: customTheme.tertiaryBackground,
+            surfaceTintColor: Colors.transparent,
+          ),
           useMaterial3: true,
         ).copyWith(
-          primaryColor: customTheme.primary,
+          primaryColor: customTheme.radical,
           extensions: [customTheme],
         ),
         darkTheme: ThemeData(
-          primarySwatch: Colors.pink,
           brightness: Brightness.dark,
-          backgroundColor: const Color(0xff252A3A),
-          scaffoldBackgroundColor: const Color(0xff252A3A),
+          backgroundColor: const Color(0xff1E1E1E),
+          scaffoldBackgroundColor: const Color(0xff1E1E1E),
+          cardTheme: const CardTheme(
+            color: Color(0xff333333),
+            surfaceTintColor: Colors.transparent,
+          ),
           useMaterial3: true,
         ).copyWith(
-          primaryColor: customTheme.primary,
+          primaryColor: customTheme.radical,
           extensions: [
             customTheme.copyWith(
-              primaryBackground: const Color(0xff252A3A),
+              primaryBackground: const Color(0xff1E1E1E),
               secondaryBackground: const Color(0xff252526),
               tertiaryBackground: const Color(0xff333333),
               onBackground: const Color(0xffE8EAED),
