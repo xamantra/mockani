@@ -1,7 +1,6 @@
 import "package:http/http.dart" as http;
-import 'package:http/http.dart' show Response;
 import 'package:mockani/src/constants/keys.dart';
-import 'package:mockani/src/data/subject_details.dart';
+import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/data/summary.dart';
 import 'package:mockani/src/data/user.dart';
 import 'package:mockani/src/utils/storage.dart';
@@ -46,31 +45,32 @@ class WanikaniRepository {
     }
   }
 
-  Future<SubjectDetails> getSubjectDetail(int id) async {
+  Future<List<SubjectData>> getSubjects({
+    List<int>? levels,
+    List<int>? ids,
+    List<int>? types,
+  }) async {
     try {
       final wanikaniToken = _token ?? await getString(WANIKANI_TOKEN);
+
+      var url = "https://api.wanikani.com/v2/subjects?";
+      if (levels != null && levels.isNotEmpty) {
+        url += "levels=${levels.join(",")}";
+      } else if (ids != null && ids.isNotEmpty) {
+        url += "ids=${ids.join(",")}";
+      } else if (types != null && types.isNotEmpty) {
+        url += "types=${types.join(",")}";
+      }
       final response = await http.get(
-        Uri.parse("https://api.wanikani.com/v2/subjects/$id"),
+        Uri.parse(url),
         headers: {
           "Authorization": "Bearer $wanikaniToken",
         },
       );
-      if (response.body.isEmpty) throw response;
-      return SubjectDetails.fromJson(response.body);
-    } on Response catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<SubjectDetails>> getSubjectItems(List<int> subjectIds) async {
-    try {
-      var result = <SubjectDetails>[];
-      for (final id in subjectIds) {
-        result.add(await getSubjectDetail(id));
-      }
-      return result;
+      final subjects = Subjects.fromJson(response.body);
+      return subjects.data;
     } catch (e) {
-      rethrow;
+      return [];
     }
   }
 }

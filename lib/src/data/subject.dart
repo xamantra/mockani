@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:mockani/src/data/answer.dart';
+
 class Subjects {
   final String object;
   final String url;
@@ -122,6 +124,26 @@ class SubjectData {
   final String url;
   final String data_updated_at;
   final SubjectItem data;
+
+  List<String> get getMeaningAnswers {
+    final meanings = data.meanings.where((m) => m.accepted_answer).map((e) => e.answer.toLowerCase());
+    final alternatives = data.auxiliary_meanings.where((a) => a.type == "whitelist").map((e) => e.answer.toLowerCase());
+    return meanings.toList()..addAll(alternatives..toList());
+  }
+
+  List<String> get getReadingAnswers {
+    return data.readings.where((r) => r.accepted_answer).map((e) => e.reading.toLowerCase()).toList();
+  }
+
+  CharacterImage? get getCharacterImage {
+    if (data.character_images.isNotEmpty) {
+      return data.character_images.firstWhere((x) => x.inlineStyles && x.content_type.contains("svg+xml"));
+    }
+    return null;
+  }
+
+  bool get isRadical => object == "radical";
+
   SubjectData({
     required this.id,
     required this.object,
@@ -198,6 +220,10 @@ class SubjectItem {
   final String characters;
   final List<Meaning> meanings;
   final List<AuxiliaryMeaning> auxiliary_meanings;
+  final List<Reading> readings;
+  final List<int> component_subject_ids;
+  final List<int> amalgamation_subject_ids;
+  final List<CharacterImage> character_images;
   final String meaning_mnemonic;
   final int lesson_position;
   final int spaced_repetition_system_id;
@@ -215,6 +241,10 @@ class SubjectItem {
     required this.meaning_mnemonic,
     required this.lesson_position,
     required this.spaced_repetition_system_id,
+    required this.readings,
+    required this.component_subject_ids,
+    required this.amalgamation_subject_ids,
+    required this.character_images,
   });
 
   SubjectItem copyWith({
@@ -228,6 +258,10 @@ class SubjectItem {
     String? meaning_mnemonic,
     int? lesson_position,
     int? spaced_repetition_system_id,
+    List<int>? amalgamation_subject_ids,
+    List<CharacterImage>? character_images,
+    List<int>? component_subject_ids,
+    List<Reading>? readings,
   }) {
     return SubjectItem(
       created_at: created_at ?? this.created_at,
@@ -240,6 +274,10 @@ class SubjectItem {
       meaning_mnemonic: meaning_mnemonic ?? this.meaning_mnemonic,
       lesson_position: lesson_position ?? this.lesson_position,
       spaced_repetition_system_id: spaced_repetition_system_id ?? this.spaced_repetition_system_id,
+      amalgamation_subject_ids: amalgamation_subject_ids ?? this.amalgamation_subject_ids,
+      character_images: character_images ?? this.character_images,
+      component_subject_ids: component_subject_ids ?? this.component_subject_ids,
+      readings: readings ?? this.readings,
     );
   }
 
@@ -253,6 +291,10 @@ class SubjectItem {
     result.addAll({'characters': characters});
     result.addAll({'meanings': meanings.map((x) => x.toMap()).toList()});
     result.addAll({'auxiliary_meanings': auxiliary_meanings.map((x) => x.toMap()).toList()});
+    result.addAll({'character_images': character_images.map((x) => x.toMap()).toList()});
+    result.addAll({'readings': readings.map((x) => x.toMap()).toList()});
+    result.addAll({'component_subject_ids': component_subject_ids});
+    result.addAll({'amalgamation_subject_ids': amalgamation_subject_ids});
     result.addAll({'meaning_mnemonic': meaning_mnemonic});
     result.addAll({'lesson_position': lesson_position});
     result.addAll({'spaced_repetition_system_id': spaced_repetition_system_id});
@@ -269,6 +311,10 @@ class SubjectItem {
       characters: map['characters'] ?? '',
       meanings: List<Meaning>.from(map['meanings']?.map((x) => Meaning.fromMap(x)) ?? []),
       auxiliary_meanings: List<AuxiliaryMeaning>.from(map['auxiliary_meanings']?.map((x) => AuxiliaryMeaning.fromMap(x)) ?? []),
+      character_images: List<CharacterImage>.from(map['character_images']?.map((x) => CharacterImage.fromMap(x)) ?? []),
+      readings: List<Reading>.from(map['readings']?.map((x) => Reading.fromMap(x)) ?? []),
+      component_subject_ids: List<int>.from(map['component_subject_ids'] ?? []),
+      amalgamation_subject_ids: List<int>.from(map['amalgamation_subject_ids'] ?? []),
       meaning_mnemonic: map['meaning_mnemonic'] ?? '',
       lesson_position: map['lesson_position']?.toInt() ?? 0,
       spaced_repetition_system_id: map['spaced_repetition_system_id']?.toInt() ?? 0,
@@ -281,14 +327,20 @@ class SubjectItem {
 
   @override
   String toString() {
-    return 'Data(created_at: $created_at, level: $level, slug: $slug, document_url: $document_url, characters: $characters, meanings: $meanings, auxiliary_meanings: $auxiliary_meanings, meaning_mnemonic: $meaning_mnemonic, lesson_position: $lesson_position, spaced_repetition_system_id: $spaced_repetition_system_id)';
+    return 'SubjectItem(created_at: $created_at, level: $level, slug: $slug, document_url: $document_url, characters: $characters, meanings: $meanings, auxiliary_meanings: $auxiliary_meanings, readings: $readings, component_subject_ids: $component_subject_ids, amalgamation_subject_ids: $amalgamation_subject_ids, meaning_mnemonic: $meaning_mnemonic, lesson_position: $lesson_position, spaced_repetition_system_id: $spaced_repetition_system_id)';
   }
 }
 
-class Meaning {
+class Meaning extends MeaningInterface {
   final String meaning;
   final bool primary;
   final bool accepted_answer;
+
+  @override
+  String get answer {
+    return meaning.toLowerCase();
+  }
+
   Meaning({
     required this.meaning,
     required this.primary,
@@ -343,9 +395,82 @@ class Meaning {
   int get hashCode => meaning.hashCode ^ primary.hashCode ^ accepted_answer.hashCode;
 }
 
-class AuxiliaryMeaning {
+class Reading {
+  final String type;
+  final bool primary;
+  final String reading;
+  final bool accepted_answer;
+  Reading({
+    required this.type,
+    required this.primary,
+    required this.reading,
+    required this.accepted_answer,
+  });
+
+  Reading copyWith({
+    String? type,
+    bool? primary,
+    String? reading,
+    bool? accepted_answer,
+  }) {
+    return Reading(
+      type: type ?? this.type,
+      primary: primary ?? this.primary,
+      reading: reading ?? this.reading,
+      accepted_answer: accepted_answer ?? this.accepted_answer,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'type': type});
+    result.addAll({'primary': primary});
+    result.addAll({'reading': reading});
+    result.addAll({'accepted_answer': accepted_answer});
+
+    return result;
+  }
+
+  factory Reading.fromMap(Map<String, dynamic> map) {
+    return Reading(
+      type: map['type'] ?? '',
+      primary: map['primary'] ?? false,
+      reading: map['reading'] ?? '',
+      accepted_answer: map['accepted_answer'] ?? false,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Reading.fromJson(String source) => Reading.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Reading(type: $type, primary: $primary, reading: $reading, accepted_answer: $accepted_answer)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Reading && other.type == type && other.primary == primary && other.reading == reading && other.accepted_answer == accepted_answer;
+  }
+
+  @override
+  int get hashCode {
+    return type.hashCode ^ primary.hashCode ^ reading.hashCode ^ accepted_answer.hashCode;
+  }
+}
+
+class AuxiliaryMeaning extends MeaningInterface {
   final String type;
   final String meaning;
+
+  @override
+  String get answer {
+    return meaning.toLowerCase();
+  }
 
   AuxiliaryMeaning({required this.type, required this.meaning});
 
@@ -368,4 +493,71 @@ class AuxiliaryMeaning {
   String toJson() => json.encode(toMap());
 
   factory AuxiliaryMeaning.fromJson(String source) => AuxiliaryMeaning.fromMap(json.decode(source));
+}
+
+class CharacterImage {
+  final String url;
+  final String content_type;
+  final Map<String, dynamic> metadata;
+
+  bool get inlineStyles {
+    try {
+      return metadata["inline_styles"] ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  CharacterImage({
+    required this.url,
+    required this.content_type,
+    required this.metadata,
+  });
+
+  CharacterImage copyWith({
+    String? url,
+    String? content_type,
+    Map<String, dynamic>? metadata,
+  }) {
+    return CharacterImage(
+      url: url ?? this.url,
+      content_type: content_type ?? this.content_type,
+      metadata: metadata ?? this.metadata,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'url': url});
+    result.addAll({'content_type': content_type});
+    result.addAll({'metadata': metadata});
+
+    return result;
+  }
+
+  factory CharacterImage.fromMap(Map<String, dynamic> map) {
+    return CharacterImage(
+      url: map['url'] ?? '',
+      content_type: map['content_type'] ?? '',
+      metadata: map['metadata'] ?? {},
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CharacterImage.fromJson(String source) => CharacterImage.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'Character_image(url: $url, content_type: $content_type)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CharacterImage && other.url == url && other.content_type == content_type;
+  }
+
+  @override
+  int get hashCode => url.hashCode ^ content_type.hashCode;
 }

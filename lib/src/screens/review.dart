@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jovial_svg/jovial_svg.dart';
 import 'package:mockani/src/constants/keys.dart';
-import 'package:mockani/src/data/subject_details.dart';
+import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/utils/extension.dart';
@@ -34,7 +34,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   bool commitedMistake = false;
   bool get answeredCurrentItem => correctMeaning && correctReading;
 
-  List<SubjectDetails> answeredItems = [];
+  List<SubjectData> answeredItems = [];
 
   String? error;
   String? warning;
@@ -89,7 +89,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                       ),
                     );
                   }
-                  if (provider.loadingMore && provider.reviewSubjects.isEmpty) {
+                  if (provider.loading && provider.reviewSubjects.isEmpty) {
                     return Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -305,7 +305,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     answers = [];
   }
 
-  void submit(SubjectDetails item, String answer) {
+  void submit(SubjectData item, String answer) {
     setState(() {
       if (answerMeaning || item.isRadical) {
         if (isInputMixed(answer)) {
@@ -350,7 +350,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
-  void checkMeaning(SubjectDetails item, String answer) async {
+  void checkMeaning(SubjectData item, String answer) async {
     if (!correctMeaning) {
       // check for spelling error
       final distance = <String, double>{};
@@ -372,7 +372,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
   }
 
-  void checkReading(SubjectDetails item, String answer) {
+  void checkReading(SubjectData item, String answer) {
     if (!correctReading) {
       warning = null;
       answers = item.getReadingAnswers;

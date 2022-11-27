@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:mockani/src/data/subject_details.dart';
+import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/data/summary.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 
@@ -12,15 +12,13 @@ class ReviewProvider {
 
   Summary? summary;
   List<int> shuffledReviews = [];
-  List<int> loadedIds = [];
 
-  bool loadingMore = true;
-  List<SubjectDetails> reviewSubjects = [];
-  SubjectDetails get getCurrent => reviewSubjects[0];
-  bool get completed => shuffledReviews.length == results.values.where((correct) => correct).length && fullyLoaded;
+  bool loading = true;
+  List<SubjectData> reviewSubjects = [];
+  SubjectData get getCurrent => reviewSubjects[0];
+  bool get completed => shuffledReviews.length == results.values.where((correct) => correct).length;
   Map<int, bool> results = {};
 
-  bool fullyLoaded = false;
   bool nothingToReview = false;
 
   ReviewProvider(this.repository);
@@ -54,56 +52,34 @@ class ReviewProvider {
     reviewSubjects.removeWhere((r) => r.id == id);
     reAddMistakes();
     _state.add(this);
-
-    if (!fullyLoaded) {
-      loadItems();
-    }
   }
 
   void reAddMistakes() {
     final hasMistake = results.values.any((correct) => !correct);
-    if (reviewSubjects.isEmpty && fullyLoaded && hasMistake) {
+    if (reviewSubjects.isEmpty && hasMistake) {
       shuffledReviews = results.entries.where((item) => !item.value).map((e) => e.key).toList();
-      fullyLoaded = false;
-      loadedIds = [];
       results = {};
+      loadItems();
     }
   }
 
-  bool answerMeaning(SubjectDetails item, String answer) {
+  bool answerMeaning(SubjectData item, String answer) {
     final matched = item.getMeaningAnswers.any((a) => a.toLowerCase() == answer.toLowerCase());
     return matched;
   }
 
-  bool answerReading(SubjectDetails item, String answer) {
+  bool answerReading(SubjectData item, String answer) {
     final matched = item.getReadingAnswers.any((a) => a.toLowerCase() == answer.toLowerCase());
     return matched;
   }
 
-  /// Load 3 review items per call.
   Future<void> loadItems() async {
-    loadingMore = true;
+    loading = true;
     _state.add(this);
 
-    var loaded = 0;
-    for (var i = 0; i < shuffledReviews.length; i++) {
-      if (loaded == 3) {
-        loadingMore = false;
-        _state.add(this);
-        break;
-      }
-      final id = shuffledReviews[i];
-      if (!loadedIds.any((l) => l == id)) {
-        reviewSubjects.add(await repository.getSubjectDetail(id));
-        loadedIds.add(id);
-        loaded++;
-        if (i == shuffledReviews.length - 1) {
-          fullyLoaded = true;
-        }
-        _state.add(this);
-      } else {
-        continue;
-      }
-    }
+    reviewSubjects = await repository.getSubjects(ids: shuffledReviews);
+
+    loading = false;
+    _state.add(this);
   }
 }
