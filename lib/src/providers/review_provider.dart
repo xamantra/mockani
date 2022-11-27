@@ -14,7 +14,6 @@ class ReviewProvider {
   List<int> shuffledReviews = [];
   List<int> loadedIds = [];
 
-  /// This is the variables that should be used in the UI.
   bool loadingMore = true;
   List<SubjectDetails> reviewSubjects = [];
   SubjectDetails get getCurrent => reviewSubjects[0];
@@ -22,6 +21,7 @@ class ReviewProvider {
   Map<int, bool> results = {};
 
   bool fullyLoaded = false;
+  bool nothingToReview = false;
 
   ReviewProvider(this.repository);
 
@@ -29,6 +29,10 @@ class ReviewProvider {
     summary = await repository.getSummary();
 
     final reviews = summary?.getReviews ?? [];
+    if (reviews.isEmpty) {
+      nothingToReview = true;
+      _state.add(this);
+    }
 
     if (isAll) {
       shuffledReviews = reviews.expand((r) => r.subject_ids).toSet().toList()..shuffle();
@@ -36,7 +40,9 @@ class ReviewProvider {
       shuffledReviews = reviews.where((x) => x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList()..shuffle();
     }
 
-    await loadItems();
+    if (reviews.isNotEmpty) {
+      await loadItems();
+    }
   }
 
   bool isPassed(int id) {

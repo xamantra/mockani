@@ -14,7 +14,6 @@ import 'package:mockani/src/widgets/alert_widget.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
 import 'package:mockani/src/widgets/review_counter.dart';
 import 'package:provider/provider.dart';
-import 'package:string_similarity/string_similarity.dart';
 
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({super.key, required this.all});
@@ -65,7 +64,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             return Scaffold(
               body: Builder(
                 builder: (context) {
-                  if (provider.completed) {
+                  if (provider.completed || provider.nothingToReview) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
