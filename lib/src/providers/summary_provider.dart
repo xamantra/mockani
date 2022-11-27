@@ -33,9 +33,7 @@ class SummaryProvider {
 
   List<Review> get getReviews => summary?.getReviews ?? [];
 
-  SummaryProvider(this.repository) {
-    fetchSummary();
-  }
+  SummaryProvider(this.repository);
 
   Future<void> fetchSummary() async {
     if (loading) return;
