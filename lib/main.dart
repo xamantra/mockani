@@ -9,8 +9,10 @@ import 'package:mockani/src/screens/login.dart';
 import 'package:mockani/src/screens/review.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:provider/provider.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() {
+  setPathUrlStrategy();
   runApp(const MyApp());
 }
 
