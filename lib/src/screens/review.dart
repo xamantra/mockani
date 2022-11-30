@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:jovial_svg/jovial_svg.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject.dart';
+import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
@@ -26,6 +27,7 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class _ReviewScreenState extends State<ReviewScreen> {
+  late final authProvider = Provider.of<AuthProvider>(context);
   late final themeProvider = Provider.of<ThemeProvider>(context);
   final reviewProvider = ReviewProvider(const WanikaniRepository());
   late CustomTheme theme;
@@ -57,6 +59,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     Future.delayed(const Duration(milliseconds: 100), () {
       focusNode.requestFocus();
+    });
+
+    authProvider.stream.listen((event) {
+      if (!event.loggedIn) {
+        Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
+      }
     });
   }
 
