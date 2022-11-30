@@ -7,6 +7,7 @@ import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/screens/home.dart';
 import 'package:mockani/src/screens/login.dart';
 import 'package:mockani/src/screens/review.dart';
+import 'package:mockani/src/utils/review_type.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -81,12 +82,12 @@ class MyApp extends StatelessWidget {
               ],
             ),
             debugShowCheckedModeBanner: false,
-            initialRoute: "login",
+            initialRoute: LOGIN_ROUTE,
             routes: {
               LOGIN_ROUTE: (_) => const LoginScreen(),
               HOME_ROUTE: (_) => const HomeScreen(),
-              REVIEW_ROUTE: (_) => const ReviewScreen(advanceReview: false),
-              ADVANCE_REVIEW_ROUTE: (_) => const ReviewScreen(advanceReview: true),
+              REVIEW_ROUTE: (_) => const ReviewScreen(reviewType: ReviewType.available),
+              ADVANCE_REVIEW_ROUTE: (_) => const ReviewScreen(reviewType: ReviewType.advanceReview),
             },
           );
         },

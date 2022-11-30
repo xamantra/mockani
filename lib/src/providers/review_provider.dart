@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/data/summary.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
+import 'package:mockani/src/utils/review_type.dart';
 
 class ReviewProvider {
   final WanikaniRepository repository;
@@ -24,7 +25,7 @@ class ReviewProvider {
 
   ReviewProvider(this.repository);
 
-  Future<void> init(bool advanceReview) async {
+  Future<void> init(ReviewType reviewType) async {
     if (reviewIds.isNotEmpty) return;
 
     loading = true;
@@ -41,10 +42,13 @@ class ReviewProvider {
       _state.add(this);
     }
 
-    if (advanceReview) {
-      reviewIds = reviews.where((x) => !x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
-    } else {
-      reviewIds = reviews.where((x) => x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
+    switch (reviewType) {
+      case ReviewType.available:
+        reviewIds = reviews.where((x) => x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
+        break;
+      case ReviewType.advanceReview:
+        reviewIds = reviews.where((x) => !x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
+        break;
     }
 
     if (reviews.isNotEmpty) {

@@ -22,13 +22,14 @@ class ReviewCounter extends StatelessWidget {
     final theme = getCustomTheme(context);
     final captionFont = Theme.of(context).textTheme.caption;
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(18),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -47,6 +48,7 @@ class ReviewCounter extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -67,6 +69,7 @@ class ReviewCounter extends StatelessWidget {
           Text(
             "$reviewedCount / $totalCount",
             style: Theme.of(context).textTheme.caption,
+            textAlign: TextAlign.end,
           ),
         ],
       ),

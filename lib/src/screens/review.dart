@@ -11,6 +11,7 @@ import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/utils/extension.dart';
 import 'package:mockani/src/utils/kana_kit.dart';
+import 'package:mockani/src/utils/review_type.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:mockani/src/widgets/alert_widget.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
@@ -18,9 +19,9 @@ import 'package:mockani/src/widgets/review_counter.dart';
 import 'package:provider/provider.dart';
 
 class ReviewScreen extends StatefulWidget {
-  const ReviewScreen({super.key, required this.advanceReview});
+  const ReviewScreen({super.key, required this.reviewType});
 
-  final bool advanceReview;
+  final ReviewType reviewType;
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
@@ -53,7 +54,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    reviewProvider.init(widget.advanceReview);
+    reviewProvider.init(widget.reviewType);
 
     theme = getCustomTheme(context);
 
@@ -292,24 +293,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                 ),
                               ),
                               Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 18),
+                                  child: Text(
+                                    getReviewTypeLabel(widget.reviewType),
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ),
+                              ),
+                              Align(
                                 alignment: Alignment.bottomLeft,
-                                child: Row(
+                                child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
-                                        },
-                                        tooltip: "Back home",
-                                        icon: Icon(
-                                          Icons.home,
-                                          size: 18,
-                                          color: theme.onBackground,
-                                        ),
-                                      ),
-                                    ),
                                     Padding(
                                       padding: const EdgeInsets.all(12),
                                       child: IconButton(
@@ -326,6 +323,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                               color: theme.onBackground,
                                             );
                                           },
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                                        },
+                                        tooltip: "Back home",
+                                        icon: Icon(
+                                          Icons.home,
+                                          size: 18,
+                                          color: theme.onBackground,
                                         ),
                                       ),
                                     ),
