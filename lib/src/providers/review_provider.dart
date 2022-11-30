@@ -24,7 +24,7 @@ class ReviewProvider {
 
   ReviewProvider(this.repository);
 
-  Future<void> init(bool isAll) async {
+  Future<void> init(bool advanceReview) async {
     if (reviewIds.isNotEmpty) return;
 
     loading = true;
@@ -41,8 +41,8 @@ class ReviewProvider {
       _state.add(this);
     }
 
-    if (isAll) {
-      reviewIds = reviews.expand((r) => r.subject_ids).toSet().toList();
+    if (advanceReview) {
+      reviewIds = reviews.where((x) => !x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
     } else {
       reviewIds = reviews.where((x) => x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
     }

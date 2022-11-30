@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
-import 'package:mockani/src/utils/theme_extension.dart';
 
 class TotalReviewWidget extends StatelessWidget {
   const TotalReviewWidget({
@@ -12,7 +11,6 @@ class TotalReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = getCustomTheme(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -42,9 +40,9 @@ class TotalReviewWidget extends StatelessWidget {
               onPressed: totalReview == 0
                   ? null
                   : () {
-                      Navigator.pushNamed(context, REVIEW_ALL_ROUTE);
+                      Navigator.pushNamed(context, ADVANCE_REVIEW_ROUTE);
                     },
-              child: const Text("Review all"),
+              child: const Text("Advance review"),
             )
           ],
         ),

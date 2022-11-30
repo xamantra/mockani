@@ -17,9 +17,9 @@ import 'package:mockani/src/widgets/review_counter.dart';
 import 'package:provider/provider.dart';
 
 class ReviewScreen extends StatefulWidget {
-  const ReviewScreen({super.key, required this.all});
+  const ReviewScreen({super.key, required this.advanceReview});
 
-  final bool all;
+  final bool advanceReview;
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
@@ -51,7 +51,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    reviewProvider.init(widget.all);
+    reviewProvider.init(widget.advanceReview);
 
     theme = getCustomTheme(context);
 

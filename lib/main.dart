@@ -81,10 +81,10 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: "login",
             routes: {
-              LOGIN_ROUTE: (_) => LoginScreen(),
+              LOGIN_ROUTE: (_) => const LoginScreen(),
               HOME_ROUTE: (_) => const HomeScreen(),
-              REVIEW_ROUTE: (_) => const ReviewScreen(all: false),
-              REVIEW_ALL_ROUTE: (_) => const ReviewScreen(all: true),
+              REVIEW_ROUTE: (_) => const ReviewScreen(advanceReview: false),
+              ADVANCE_REVIEW_ROUTE: (_) => const ReviewScreen(advanceReview: true),
             },
           );
         },
