@@ -279,6 +279,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                 child: ReviewCounter(
                                   totalCount: provider.reviewIds.length,
                                   reviewedCount: provider.results.length,
+                                  correctCount: provider.results.values.where((correct) => correct).length,
+                                  incorrectCount: provider.results.values.where((correct) => !correct).length,
                                 ),
                               ),
                               Align(

@@ -19,13 +19,21 @@ bool isRomaji(String value) {
   return kana.isRomaji(value);
 }
 
+/// Does the current input end with one n.
+bool isLastLetterN(String input) {
+  final str = input.toLowerCase();
+  if (str.length <= 1) return false;
+  final last = str.length - 1;
+  return str[last] == "n";
+}
+
 /// Does the current input end with two nn.
 bool isDoubleNN(String input) {
   final str = input.toLowerCase();
   if (str.length <= 1) return false;
   final last = str.length - 1;
   final last2nd = last - 1;
-  return str[last] == "n" && str[last2nd] == "n";
+  return isLastLetterN(input) && str[last2nd] == "n";
 }
 
 /// Does the current input starts or ends with `other`.
