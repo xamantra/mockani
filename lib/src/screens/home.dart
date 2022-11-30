@@ -69,8 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (summaryProvider.loading) {
                               return const CircularLoading();
                             }
-                            return SizedBox(
+                            return Container(
                               width: 380,
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
                               child: Column(
                                 children: [
                                   AvailableReviewWidget(

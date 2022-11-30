@@ -35,8 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Center(
-            child: SizedBox(
+            child: Container(
               width: 480,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: StreamBuilder(
                 stream: provider.stream,
                 builder: (context, snapshot) {

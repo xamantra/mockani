@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jovial_svg/jovial_svg.dart';
@@ -128,37 +130,40 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   }
                   return Column(
                     children: [
-                      Expanded(
-                        flex: 25,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: theme.getColorFrom(item.object),
-                          ),
-                          child: Center(
-                            child: (item.getCharacterImage != null)
-                                ? SizedBox(
-                                    height: 128,
-                                    width: 128,
-                                    child: ColorFiltered(
-                                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                                      child: ScalableImageWidget.fromSISource(
-                                        si: ScalableImageSource.fromSvgHttpUrl(
-                                          Uri.parse(
-                                            item.getCharacterImage!.url,
-                                          ),
-                                          currentColor: Colors.white,
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: theme.getColorFrom(item.object),
+                        ),
+                        child: Center(
+                          child: (item.getCharacterImage != null)
+                              ? SizedBox(
+                                  height: 128,
+                                  width: 128,
+                                  child: ColorFiltered(
+                                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                                    child: ScalableImageWidget.fromSISource(
+                                      si: ScalableImageSource.fromSvgHttpUrl(
+                                        Uri.parse(
+                                          item.getCharacterImage!.url,
                                         ),
-                                        onLoading: (_) {
-                                          return const CircularLoading(
-                                            color: Colors.white,
-                                            size: 64,
-                                          );
-                                        },
+                                        currentColor: Colors.white,
                                       ),
+                                      onLoading: (_) {
+                                        return const CircularLoading(
+                                          color: Colors.white,
+                                          size: 64,
+                                        );
+                                      },
                                     ),
-                                  )
-                                : Text(
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(36),
+                                  child: AutoSizeText(
                                     item.data.characters,
+                                    maxLines: 1,
+                                    maxFontSize: 128,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
@@ -167,11 +172,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                           'Hiragino Kaku Gothic Pro", "Meiryo", "Source Han Sans Japanese", "NotoSansCJK", "TakaoPGothic", "Yu Gothic", "ヒラギノ角ゴ Pro W3", "メイリオ", "Osaka", "MS PGothic", "ＭＳ Ｐゴシック", "Noto Sans JP", "PingFang SC", "Noto Sans SC", sans-serif',
                                     ),
                                   ),
-                          ),
+                                ),
                         ),
                       ),
                       Expanded(
-                        flex: 65,
                         child: SizedBox(
                           width: double.infinity,
                           height: double.infinity,
@@ -179,7 +183,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             children: [
                               Column(
                                 children: [
-                                  const SizedBox(height: 24),
+                                  SizedBox(height: answers.isEmpty ? 0 : 24),
                                   answers.isEmpty
                                       ? const SizedBox()
                                       : Text(
@@ -195,14 +199,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                         selectionColor: theme.getColorFrom(item.object).withOpacity(0.8),
                                       ),
                                     ),
-                                    child: TextFormField(
+                                    child: AutoSizeTextField(
                                       controller: inputController,
                                       focusNode: focusNode,
                                       maxLines: 1,
                                       minLines: 1,
+                                      maxFontSize: 48,
                                       textAlign: TextAlign.center,
                                       textAlignVertical: TextAlignVertical.center,
                                       decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                                         border: InputBorder.none,
                                         hintText: item.isRadical
                                             ? "Radical Name"
@@ -221,18 +227,18 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                         fontSize: 48,
                                       ),
                                       cursorColor: theme.getColorFrom(item.object),
-                                      onFieldSubmitted: (value) {
+                                      onSubmitted: (value) {
                                         if (value.trim().isNotEmpty) {
                                           submit(item, value.trim());
                                         }
                                         focusNode.requestFocus();
                                       },
-                                      onSaved: (value) {
-                                        if (value != null && value.trim().isNotEmpty) {
-                                          submit(item, value.trim());
-                                        }
-                                        focusNode.requestFocus();
-                                      },
+                                      // onSaved: (value) {
+                                      //   if (value != null && value.trim().isNotEmpty) {
+                                      //     submit(item, value.trim());
+                                      //   }
+                                      //   focusNode.requestFocus();
+                                      // },
                                       onChanged: (value) {
                                         if (!answerMeaning) {
                                           if (item.isRadical) return;

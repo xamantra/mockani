@@ -29,7 +29,8 @@ class ReviewCounter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -37,6 +38,7 @@ class ReviewCounter extends StatelessWidget {
                 style: captionFont?.copyWith(
                   color: theme.success.withOpacity(0.6),
                 ),
+                textAlign: TextAlign.end,
               ),
               const SizedBox(width: 8),
               Icon(
@@ -48,7 +50,8 @@ class ReviewCounter extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -56,6 +59,7 @@ class ReviewCounter extends StatelessWidget {
                 style: captionFont?.copyWith(
                   color: theme.danger.withOpacity(0.6),
                 ),
+                textAlign: TextAlign.end,
               ),
               const SizedBox(width: 8),
               Icon(
