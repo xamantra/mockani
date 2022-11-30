@@ -131,15 +131,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   return Column(
                     children: [
                       Container(
-                        width: double.infinity,
                         decoration: BoxDecoration(
                           color: theme.getColorFrom(item.object),
                         ),
                         child: Center(
                           child: (item.getCharacterImage != null)
-                              ? SizedBox(
-                                  height: 128,
-                                  width: 128,
+                              ? Container(
+                                  height: 256,
+                                  width: 256,
+                                  padding: const EdgeInsets.all(36),
                                   child: ColorFiltered(
                                     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                                     child: ScalableImageWidget.fromSISource(
@@ -152,7 +152,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                       onLoading: (_) {
                                         return const CircularLoading(
                                           color: Colors.white,
-                                          size: 64,
+                                          size: 256,
                                         );
                                       },
                                     ),
