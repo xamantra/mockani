@@ -54,6 +54,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
     reviewProvider.init(widget.all);
 
     theme = getCustomTheme(context);
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      focusNode.requestFocus();
+    });
   }
 
   @override
@@ -209,14 +213,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                       ),
                                       cursorColor: theme.getColorFrom(item.object),
                                       onFieldSubmitted: (value) {
-                                        if (value.isNotEmpty) {
-                                          submit(item, value);
+                                        if (value.trim().isNotEmpty) {
+                                          submit(item, value.trim());
                                         }
                                         focusNode.requestFocus();
                                       },
                                       onSaved: (value) {
-                                        if (value != null && value.isNotEmpty) {
-                                          submit(item, value);
+                                        if (value != null && value.trim().isNotEmpty) {
+                                          submit(item, value.trim());
                                         }
                                         focusNode.requestFocus();
                                       },
