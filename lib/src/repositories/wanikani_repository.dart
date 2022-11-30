@@ -48,21 +48,22 @@ class WanikaniRepository {
   Future<List<SubjectData>> getSubjects({
     List<int>? levels,
     List<int>? ids,
-    List<int>? types,
+    List<String>? types,
   }) async {
     try {
       final wanikaniToken = _token ?? await getString(WANIKANI_TOKEN);
 
       var url = "https://api.wanikani.com/v2/subjects?";
+      final parameters = <String>[];
       if (levels != null && levels.isNotEmpty) {
-        url += "levels=${levels.join(",")}";
+        parameters.add("levels=${levels.join(",")}");
       } else if (ids != null && ids.isNotEmpty) {
-        url += "ids=${ids.join(",")}";
+        parameters.add("ids=${ids.join(",")}");
       } else if (types != null && types.isNotEmpty) {
-        url += "types=${types.join(",")}";
+        parameters.add("types=${types.join(",")}");
       }
       final response = await http.get(
-        Uri.parse(url),
+        Uri.parse(url + parameters.join("&")),
         headers: {
           "Authorization": "Bearer $wanikaniToken",
         },
