@@ -24,12 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
   late CustomTheme theme;
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 200), () {
+      summaryProvider.fetchSummary();
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     theme = getCustomTheme(context);
-
-    summaryProvider.fetchSummary();
 
     authProvider.stream.listen((event) {
       if (!event.loggedIn) {
