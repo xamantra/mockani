@@ -70,8 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     availableReview: summaryProvider.getAvailableReviews.length,
                                   ),
                                   const SizedBox(height: 12),
-                                  TotalReviewWidget(
-                                    totalReview: summaryProvider.getTotalReviews,
+                                  AdvanceReviewWidget(
+                                    advanceReview: summaryProvider.getUnavailableReviews.length,
                                   ),
                                 ],
                               ),

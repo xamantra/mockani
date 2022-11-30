@@ -31,6 +31,16 @@ class SummaryProvider {
     return result.toSet().toList();
   }
 
+  List<int> get getUnavailableReviews {
+    var result = <int>[];
+    for (final review in getReviews) {
+      if (!review.isAvailableNow) {
+        result.addAll(review.subject_ids);
+      }
+    }
+    return result.toSet().toList();
+  }
+
   List<Review> get getReviews => summary?.getReviews ?? [];
 
   SummaryProvider(this.repository);

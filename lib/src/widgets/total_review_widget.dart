@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 
-class TotalReviewWidget extends StatelessWidget {
-  const TotalReviewWidget({
+class AdvanceReviewWidget extends StatelessWidget {
+  const AdvanceReviewWidget({
     super.key,
-    required this.totalReview,
+    required this.advanceReview,
   });
 
-  final int totalReview;
+  final int advanceReview;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class TotalReviewWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "$totalReview items",
+                    "$advanceReview items",
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
@@ -37,7 +37,7 @@ class TotalReviewWidget extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             ElevatedButton(
-              onPressed: totalReview == 0
+              onPressed: advanceReview == 0
                   ? null
                   : () {
                       Navigator.pushNamed(context, ADVANCE_REVIEW_ROUTE);
