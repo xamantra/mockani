@@ -434,7 +434,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
       if (answeredCurrentItem || (correctMeaning && item.isRadical)) {
         if (item.isRadical) {
-          reviewProvider.saveResult(item.id, correctMeaning);
+          reviewProvider.saveResult(item.id, correctMeaning && !commitedMistake);
         } else {
           reviewProvider.saveResult(item.id, answeredCurrentItem && !commitedMistake);
         }
