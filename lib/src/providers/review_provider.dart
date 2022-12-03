@@ -25,6 +25,10 @@ class ReviewProvider {
 
   ReviewProvider(this.repository);
 
+  void updateState() {
+    _state.add(this);
+  }
+
   Future<void> init(ReviewType reviewType) async {
     if (reviewIds.isNotEmpty) return;
 
@@ -48,6 +52,8 @@ class ReviewProvider {
         break;
       case ReviewType.advanceReview:
         reviewIds = reviews.where((x) => !x.isAvailableNow).expand((r) => r.subject_ids).toSet().toList();
+        break;
+      default:
         break;
     }
 
