@@ -8,6 +8,8 @@ import 'package:jovial_svg/jovial_svg.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
+import 'package:mockani/src/providers/home_review_provider.dart';
+import 'package:mockani/src/providers/review_level_provider.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
@@ -32,7 +34,8 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   late final authProvider = Provider.of<AuthProvider>(context);
   late final themeProvider = Provider.of<ThemeProvider>(context);
-  final reviewProvider = ReviewProvider(const WanikaniRepository());
+  late final homeReviewProvider = Provider.of<HomeReviewProvider>(context);
+  late final ReviewProvider reviewProvider;
   late CustomTheme theme;
 
   bool answerMeaning = Random().nextBool();
@@ -55,6 +58,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    switch (widget.reviewType) {
+      case ReviewType.level:
+        reviewProvider = ReviewLevelProvider(
+          const WanikaniRepository(),
+          homeReviewProvider.selectedLevels,
+          homeReviewProvider.selectedTypes,
+        );
+        homeReviewProvider.clearSelection();
+        break;
+      default:
+        reviewProvider = ReviewProvider(const WanikaniRepository());
+        break;
+    }
 
     reviewProvider.init(widget.reviewType);
 
@@ -303,7 +320,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 18),
                                   child: Text(
-                                    getReviewTypeLabel(widget.reviewType),
+                                    getReviewTypeLabel(widget.reviewType, reviewProvider: reviewProvider),
                                     style: Theme.of(context).textTheme.caption,
                                   ),
                                 ),

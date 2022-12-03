@@ -3,6 +3,7 @@ import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
+import 'package:mockani/src/screens/reviews/review_level.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:mockani/src/screens/reviews/review_available.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
@@ -80,6 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   AvailableReviewWidget(summaryProvider: summaryProvider),
                                   const SizedBox(height: 12),
                                   AdvanceReviewWidget(summaryProvider: summaryProvider),
+                                  const SizedBox(height: 12),
+                                  ReviewLevelWidget(user: authProvider.user),
                                 ],
                               ),
                             );

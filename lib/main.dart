@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
+import 'package:mockani/src/providers/home_review_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => themeProvider),
         Provider(create: (_) => AuthProvider(wanikaniRepository)),
         Provider(create: (_) => SummaryProvider(wanikaniRepository)),
+        Provider(create: (_) => HomeReviewProvider()),
       ],
       child: StreamBuilder(
         stream: themeProvider.stream,
@@ -69,6 +71,7 @@ class MyApp extends StatelessWidget {
               HOME_ROUTE: (BuildContext _) => const HomeScreen(),
               REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.available),
               ADVANCE_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.advanceReview),
+              LEVEL_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.level),
             },
           );
         },
