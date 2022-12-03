@@ -67,11 +67,11 @@ class ReviewProvider {
   void saveResult(int id, bool correct) {
     results[id] = correct;
     reviewSubjects.removeWhere((r) => r.id == id);
-    reAddMistakes();
+    validateResults();
     _state.add(this);
   }
 
-  void reAddMistakes() {
+  void validateResults() {
     final hasMistake = results.values.any((correct) => !correct);
     if (reviewSubjects.isEmpty && hasMistake) {
       reviewIds = results.entries.where((item) => !item.value).map((e) => e.key).toList();

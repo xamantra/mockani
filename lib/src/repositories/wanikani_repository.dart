@@ -81,8 +81,8 @@ class WanikaniRepository {
     }
   }
 
-  /// Return subjects of specific levels where the lessons are completed.
-  Future<List<SubjectData>> getSubjectsByLevel({
+  /// Return subject IDs of specific levels where the lessons are completed.
+  Future<List<int>> getAssignments({
     required List<int> levels,
     List<String> subject_types = const ["radical", "kanji", "vocabulary"],
   }) async {
@@ -105,7 +105,7 @@ class WanikaniRepository {
       );
       final list = jsonDecode(response.body)["data"] as List;
       final ids = list.map((item) => item["data"]["subject_id"] as int).toList();
-      return await getSubjects(ids: ids);
+      return ids;
     } catch (e) {
       return [];
     }

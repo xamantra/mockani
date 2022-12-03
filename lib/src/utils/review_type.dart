@@ -1,4 +1,4 @@
-import 'package:mockani/src/providers/review_level_provider.dart';
+import 'package:mockani/src/providers/study_level_provider.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 
 enum ReviewType {
@@ -14,7 +14,7 @@ String getReviewTypeLabel(ReviewType type, {ReviewProvider? reviewProvider}) {
     case ReviewType.advanceReview:
       return "Advance Review";
     case ReviewType.level:
-      if (reviewProvider != null && reviewProvider is ReviewLevelProvider) {
+      if (reviewProvider != null && reviewProvider is StudyLevelProvider) {
         return "Review Level ${reviewProvider.selectedLevels.join(',')}";
       }
       return "Level Review";

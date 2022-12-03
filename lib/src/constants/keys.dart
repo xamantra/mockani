@@ -7,4 +7,4 @@ const LOGIN_ROUTE = "/";
 const HOME_ROUTE = "/home";
 const REVIEW_ROUTE = "/review";
 const ADVANCE_REVIEW_ROUTE = "/advance-review";
-const LEVEL_REVIEW_ROUTE = "/level-review";
+const LEVEL_STUDY_ROUTE = "/level-study";

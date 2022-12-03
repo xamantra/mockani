@@ -9,7 +9,7 @@ import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/home_review_provider.dart';
-import 'package:mockani/src/providers/review_level_provider.dart';
+import 'package:mockani/src/providers/study_level_provider.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
@@ -61,7 +61,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     switch (widget.reviewType) {
       case ReviewType.level:
-        reviewProvider = ReviewLevelProvider(
+        reviewProvider = StudyLevelProvider(
           const WanikaniRepository(),
           homeReviewProvider.selectedLevels,
           homeReviewProvider.selectedTypes,
@@ -84,6 +84,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
     authProvider.stream.listen((event) {
       if (!event.loggedIn) {
         Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
+      }
+    });
+    reviewProvider.stream.listen((event) {
+      if (!event.loading) {
+        focusNode.requestFocus();
       }
     });
   }

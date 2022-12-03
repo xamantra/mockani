@@ -67,7 +67,7 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Review current level.",
+                    "Study current level.",
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
@@ -77,9 +77,9 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
             ElevatedButton(
               onPressed: () {
                 homeReviewProvider.selectLevelAndType(levels: [widget.user.data.level], types: selectedTypes);
-                Navigator.pushNamed(context, LEVEL_REVIEW_ROUTE);
+                Navigator.pushNamed(context, LEVEL_STUDY_ROUTE);
               },
-              child: const Text("Review"),
+              child: const Text("Study"),
             )
           ],
         ),
@@ -121,7 +121,7 @@ class _TypeSelectionDialogState extends State<_TypeSelectionDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Level Review",
+              "Study Level",
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 24),
