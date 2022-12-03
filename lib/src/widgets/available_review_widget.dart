@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
-import 'package:mockani/src/utils/theme_extension.dart';
 
 class AvailableReviewWidget extends StatelessWidget {
   const AvailableReviewWidget({
@@ -12,7 +11,6 @@ class AvailableReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = getCustomTheme(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(24),
