@@ -12,7 +12,6 @@ class ReviewProvider {
   final StreamController<ReviewProvider> _state = StreamController.broadcast();
   Stream<ReviewProvider> get stream => _state.stream;
 
-  Summary? summary;
   List<int> reviewIds = [];
 
   bool loading = false;
@@ -35,7 +34,7 @@ class ReviewProvider {
     loading = true;
     _state.add(this);
 
-    summary = await repository.getSummary();
+    final summary = await repository.getSummary();
 
     loading = false;
     _state.add(this);
