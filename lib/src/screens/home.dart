@@ -77,13 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 4),
                               child: Column(
                                 children: [
-                                  AvailableReviewWidget(
-                                    availableReview: summaryProvider.getAvailableReviews.length,
-                                  ),
+                                  AvailableReviewWidget(summaryProvider: summaryProvider),
                                   const SizedBox(height: 12),
-                                  AdvanceReviewWidget(
-                                    advanceReview: summaryProvider.getUnavailableReviews.length,
-                                  ),
+                                  AdvanceReviewWidget(summaryProvider: summaryProvider),
                                 ],
                               ),
                             );

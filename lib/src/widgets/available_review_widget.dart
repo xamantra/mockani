@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
+import 'package:mockani/src/providers/summary_provider.dart';
 
 class AvailableReviewWidget extends StatelessWidget {
   const AvailableReviewWidget({
     super.key,
-    required this.availableReview,
+    required this.summaryProvider,
   });
 
-  final int availableReview;
+  final SummaryProvider summaryProvider;
+
+  int get availableReview => summaryProvider.getAvailableReviews.length;
 
   @override
   Widget build(BuildContext context) {
