@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:mockani/src/data/subject.dart';
-import 'package:mockani/src/data/summary.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/utils/review_type.dart';
 
