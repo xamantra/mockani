@@ -19,23 +19,18 @@ class ProfileWidget extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(
-              color: theme.radical,
-              width: 5,
-            ),
+            color: theme.radical,
           ),
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(16),
           child: Text(
             user.data.level.toString(),
-            style: Theme.of(context).textTheme.headline3?.copyWith(
-                  color: theme.radical,
-                ),
+            style: Theme.of(context).textTheme.headline5,
           ),
         ),
         const SizedBox(width: 12),
         Text(
           user.data.username,
-          style: Theme.of(context).textTheme.headline3,
+          style: Theme.of(context).textTheme.headline5,
         ),
       ],
     );

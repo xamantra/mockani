@@ -54,11 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                ProfileWidget(user: authProvider.user),
-                const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: ProfileWidget(user: authProvider.user),
+                ),
+                const SizedBox(height: 8),
                 Expanded(
                   child: Stack(
                     children: [
@@ -71,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                             return Container(
                               width: 380,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 4),
                               child: Column(
                                 children: [
                                   AvailableReviewWidget(
