@@ -4,10 +4,10 @@ import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
-import 'package:mockani/src/widgets/available_review_widget.dart';
+import 'package:mockani/src/screens/reviews/review_available.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
 import 'package:mockani/src/widgets/profile_widget.dart';
-import 'package:mockani/src/widgets/total_review_widget.dart';
+import 'package:mockani/src/screens/reviews/review_advance.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
