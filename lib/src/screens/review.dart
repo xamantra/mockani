@@ -38,7 +38,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   late final ReviewProvider reviewProvider;
   late CustomTheme theme;
 
-  bool answerMeaning = Random().nextBool();
+  late bool answerMeaning;
   bool correctMeaning = false;
   bool correctReading = false;
   bool commitedMistake = false;
@@ -56,8 +56,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
   FocusNode focusNode = FocusNode();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+
+    answerMeaning = Random().nextBool();
 
     switch (widget.reviewType) {
       case ReviewType.level:
@@ -72,6 +74,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
         reviewProvider = ReviewProvider(const WanikaniRepository());
         break;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     reviewProvider.init(widget.reviewType);
 
