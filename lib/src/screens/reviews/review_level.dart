@@ -22,8 +22,7 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final homeReviewProvider = Provider.of<HomeReviewProvider>(context);
-    final theme = getCustomTheme(context);
+    final homeReviewProvider = Provider.of<HomeReviewProvider>(context, listen: false);
 
     return Card(
       child: Padding(
@@ -44,25 +43,6 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
                         "Level ${widget.user.data.level}",
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const SizedBox(width: 12),
-                      IconButton(
-                        onPressed: () {
-                          showDialog<List<String>>(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) => _TypeSelectionDialog(
-                              selectedTypes: selectedTypes,
-                            ),
-                          ).then((result) {
-                            selectedTypes = result ?? selectedTypes;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.filter_alt,
-                          size: 18,
-                          color: theme.radical,
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -76,8 +56,15 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
             const SizedBox(width: 12),
             ElevatedButton(
               onPressed: () {
-                homeReviewProvider.selectLevelAndType(levels: [widget.user.data.level], types: selectedTypes);
-                Navigator.pushNamed(context, LEVEL_STUDY_ROUTE);
+                showDialog<List<String>>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => _TypeSelectionDialog(
+                    levels: [widget.user.data.level],
+                    selectedTypes: selectedTypes,
+                    homeReviewProvider: homeReviewProvider,
+                  ),
+                );
               },
               child: const Text("Study"),
             )
@@ -90,10 +77,15 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
 
 class _TypeSelectionDialog extends StatefulWidget {
   const _TypeSelectionDialog({
+    required this.levels,
     required this.selectedTypes,
+    required this.homeReviewProvider,
   });
 
+  final List<int> levels;
   final List<String> selectedTypes;
+
+  final HomeReviewProvider homeReviewProvider;
 
   @override
   State<_TypeSelectionDialog> createState() => _TypeSelectionDialogState();
@@ -121,7 +113,7 @@ class _TypeSelectionDialogState extends State<_TypeSelectionDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Study Level",
+              "Study Level ${widget.levels.join(', ')}",
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 24),
@@ -162,9 +154,10 @@ class _TypeSelectionDialogState extends State<_TypeSelectionDialog> {
                 onPressed: selectedTypes.isEmpty
                     ? null
                     : () {
-                        Navigator.pop(context, selectedTypes);
+                        widget.homeReviewProvider.selectLevelAndType(levels: widget.levels, types: selectedTypes);
+                        Navigator.pushNamed(context, LEVEL_STUDY_ROUTE);
                       },
-                child: const Text("DONE"),
+                child: const Text("START"),
               ),
             ),
           ],

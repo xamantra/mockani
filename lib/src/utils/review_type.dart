@@ -15,7 +15,11 @@ String getReviewTypeLabel(ReviewType type, {ReviewProvider? reviewProvider}) {
       return "Advance Review";
     case ReviewType.level:
       if (reviewProvider != null && reviewProvider is StudyLevelProvider) {
-        return "Review Level ${reviewProvider.selectedLevels.join(',')}";
+        var types = "(${reviewProvider.selectedTypes.join(', ')})";
+        if (reviewProvider.selectedTypes.length == 3) {
+          types = "";
+        }
+        return "Study Level ${reviewProvider.selectedLevels.join(', ')} $types".trim();
       }
       return "Level Review";
   }

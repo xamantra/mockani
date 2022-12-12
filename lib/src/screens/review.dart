@@ -34,7 +34,7 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   late final authProvider = Provider.of<AuthProvider>(context);
   late final themeProvider = Provider.of<ThemeProvider>(context);
-  late final homeReviewProvider = Provider.of<HomeReviewProvider>(context);
+  late final homeReviewProvider = Provider.of<HomeReviewProvider>(context, listen: false);
   late final ReviewProvider reviewProvider;
   late CustomTheme theme;
 
