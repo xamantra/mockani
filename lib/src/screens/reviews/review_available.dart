@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
+import 'package:mockani/src/utils/responsive.dart';
+import 'package:mockani/src/utils/theme_extension.dart';
 
 class AvailableReviewWidget extends StatelessWidget {
   const AvailableReviewWidget({
@@ -14,40 +16,65 @@ class AvailableReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isVerySmall = isVerySmallScreen(context);
+    final theme = getCustomTheme(context);
+
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "$availableReview items",
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "available now",
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
+      child: InkWell(
+        onTap: (!isVerySmall || availableReview == 0)
+            ? null
+            : () {
+                Navigator.pushNamed(context, REVIEW_ROUTE);
+              },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "$availableReview items",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Spacer(),
+                        !isVerySmall
+                            ? const SizedBox()
+                            : Icon(
+                                Icons.keyboard_arrow_right,
+                                color: theme.radical.withOpacity(availableReview == 0 ? 0.3 : 1),
+                              ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "available now",
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            ElevatedButton(
-              onPressed: availableReview == 0
-                  ? null
-                  : () {
-                      Navigator.pushNamed(context, REVIEW_ROUTE);
-                    },
-              child: const Text("Review"),
-            )
-          ],
+              SizedBox(width: isVerySmall ? 0 : 12),
+              SizedBox(width: isVerySmall ? 0 : 12),
+              isVerySmall
+                  ? const SizedBox()
+                  : ElevatedButton(
+                      onPressed: availableReview == 0
+                          ? null
+                          : () {
+                              Navigator.pushNamed(context, REVIEW_ROUTE);
+                            },
+                      child: const Text("Review"),
+                    )
+            ],
+          ),
         ),
       ),
     );

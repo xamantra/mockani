@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/user.dart';
 import 'package:mockani/src/providers/home_review_provider.dart';
+import 'package:mockani/src/utils/responsive.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:provider/provider.dart';
 
@@ -22,40 +23,15 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isVerySmall = isVerySmallScreen(context);
     final homeReviewProvider = Provider.of<HomeReviewProvider>(context, listen: false);
+    final theme = getCustomTheme(context);
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Level ${widget.user.data.level}",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Study current level.",
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            ElevatedButton(
-              onPressed: () {
+      child: InkWell(
+        onTap: !isVerySmall
+            ? null
+            : () {
                 showDialog<List<String>>(
                   context: context,
                   barrierDismissible: false,
@@ -66,9 +42,62 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
                   ),
                 );
               },
-              child: const Text("Study"),
-            )
-          ],
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Level ${widget.user.data.level}",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Spacer(),
+                        !isVerySmall
+                            ? const SizedBox()
+                            : Icon(
+                                Icons.keyboard_arrow_right,
+                                color: theme.radical,
+                              ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Study current level.",
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: isVerySmall ? 0 : 12),
+              SizedBox(width: isVerySmall ? 0 : 12),
+              isVerySmall
+                  ? const SizedBox()
+                  : ElevatedButton(
+                      onPressed: () {
+                        showDialog<List<String>>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => _TypeSelectionDialog(
+                            levels: [widget.user.data.level],
+                            selectedTypes: selectedTypes,
+                            homeReviewProvider: homeReviewProvider,
+                          ),
+                        );
+                      },
+                      child: const Text("Study"),
+                    )
+            ],
+          ),
         ),
       ),
     );
@@ -104,6 +133,7 @@ class _TypeSelectionDialogState extends State<_TypeSelectionDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = getCustomTheme(context);
+
     return Dialog(
       child: Container(
         width: 320,
