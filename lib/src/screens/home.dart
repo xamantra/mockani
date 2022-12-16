@@ -5,9 +5,12 @@ import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/screens/reviews/review_hard_items.dart';
 import 'package:mockani/src/screens/reviews/review_level.dart';
+import 'package:mockani/src/utils/array_slice.dart';
+import 'package:mockani/src/utils/responsive.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:mockani/src/screens/reviews/review_available.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
+import 'package:mockani/src/widgets/separated_list.dart';
 import 'package:mockani/src/widgets/profile_widget.dart';
 import 'package:mockani/src/screens/reviews/review_advance.dart';
 import 'package:provider/provider.dart';
@@ -75,32 +78,45 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (summaryProvider.loading) {
                                 return const CircularLoading();
                               }
-                              return Container(
-                                width: 768,
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          AvailableReviewWidget(summaryProvider: summaryProvider),
-                                          const SizedBox(height: 12),
-                                          AdvanceReviewWidget(summaryProvider: summaryProvider),
-                                          const SizedBox(height: 12),
-                                          ReviewLevelWidget(user: authProvider.user),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        children: const [
-                                          HardItemsReviewWidget(),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+
+                              final reviewWidgets = sliceList(source: [
+                                AvailableReviewWidget(summaryProvider: summaryProvider),
+                                AdvanceReviewWidget(summaryProvider: summaryProvider),
+                                ReviewLevelWidget(user: authProvider.user),
+                                const HardItemsReviewWidget(),
+                                // add more review types here.
+                              ], itemsPerSet: 2);
+
+                              return SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Container(
+                                  width: 768,
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  child: isSmallScreen(context)
+                                      ? SeparatedList(
+                                          separator: const SizedBox(height: 12),
+                                          builder: (_, children) {
+                                            return Column(children: children);
+                                          },
+                                          children: reviewWidgets.expand((e) => e).toList(),
+                                        )
+                                      : SeparatedList(
+                                          separator: const SizedBox(height: 12),
+                                          builder: (_, children) {
+                                            return Column(children: children);
+                                          },
+                                          children: reviewWidgets
+                                              .map(
+                                                (x) => SeparatedList(
+                                                  separator: const SizedBox(width: 12),
+                                                  builder: (_, children) {
+                                                    return Row(children: children);
+                                                  },
+                                                  children: x.map((y) => Expanded(child: y)).toList(),
+                                                ),
+                                              )
+                                              .toList(),
+                                        ),
                                 ),
                               );
                             },
