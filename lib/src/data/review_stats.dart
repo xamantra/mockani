@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api
 
 import 'dart:convert';
 
@@ -112,8 +112,6 @@ class _Pages {
 
   String toJson() => json.encode(toMap());
 
-  factory _Pages.fromJson(String source) => _Pages.fromMap(json.decode(source));
-
   @override
   String toString() => 'Pages(per_page: $per_page, next_url: $next_url, previous_url: $previous_url)';
 
@@ -181,8 +179,6 @@ class _Data {
   }
 
   String toJson() => json.encode(toMap());
-
-  factory _Data.fromJson(String source) => _Data.fromMap(json.decode(source));
 
   @override
   String toString() {
