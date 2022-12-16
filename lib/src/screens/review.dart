@@ -198,8 +198,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 128,
-                                        fontFamily:
-                                            'Hiragino Kaku Gothic Pro", "Meiryo", "Source Han Sans Japanese", "NotoSansCJK", "TakaoPGothic", "Yu Gothic", "ヒラギノ角ゴ Pro W3", "メイリオ", "Osaka", "MS PGothic", "ＭＳ Ｐゴシック", "Noto Sans JP", "PingFang SC", "Noto Sans SC", sans-serif',
+                                        fontFamily: "Hiragino",
                                       ),
                                     ),
                                   ),
@@ -249,12 +248,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                             color: theme.onBackground.withOpacity(0.3),
                                             fontWeight: FontWeight.w500,
                                             fontSize: 48,
+                                            fontFamily: "Roboto",
                                           ),
                                         ),
                                         style: TextStyle(
                                           color: theme.onBackground,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 48,
+                                          fontFamily: answerMeaning ? "Roboto" : "Hiragino",
                                         ),
                                         cursorColor: theme.getColorFrom(item.object),
                                         onSubmitted: (value) {
@@ -263,12 +264,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                           }
                                           focusNode.requestFocus();
                                         },
-                                        // onSaved: (value) {
-                                        //   if (value != null && value.trim().isNotEmpty) {
-                                        //     submit(item, value.trim());
-                                        //   }
-                                        //   focusNode.requestFocus();
-                                        // },
                                         onChanged: (value) {
                                           if (!answerMeaning) {
                                             if (item.isRadical) return;
