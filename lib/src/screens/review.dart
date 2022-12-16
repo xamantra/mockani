@@ -9,6 +9,7 @@ import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/home_review_provider.dart';
+import 'package:mockani/src/providers/review_hard_items_provider.dart';
 import 'package:mockani/src/providers/study_level_provider.dart';
 import 'package:mockani/src/providers/review_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
@@ -21,6 +22,8 @@ import 'package:mockani/src/widgets/alert_widget.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
 import 'package:mockani/src/widgets/review_counter.dart';
 import 'package:provider/provider.dart';
+
+const wanikaniRepository = WanikaniRepository();
 
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({super.key, required this.reviewType});
@@ -64,14 +67,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
     switch (widget.reviewType) {
       case ReviewType.level:
         reviewProvider = StudyLevelProvider(
-          const WanikaniRepository(),
+          wanikaniRepository,
           homeReviewProvider.selectedLevels,
           homeReviewProvider.selectedTypes,
         );
         homeReviewProvider.clearSelection();
         break;
+      case ReviewType.hardItemsReview:
+        reviewProvider = ReviewHardItemsProvider(wanikaniRepository);
+        break;
       default:
-        reviewProvider = ReviewProvider(const WanikaniRepository());
+        reviewProvider = ReviewProvider(wanikaniRepository);
         break;
     }
   }

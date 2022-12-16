@@ -3,6 +3,7 @@ import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
+import 'package:mockani/src/screens/reviews/review_hard_items.dart';
 import 'package:mockani/src/screens/reviews/review_level.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:mockani/src/screens/reviews/review_available.dart';
@@ -75,15 +76,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return const CircularLoading();
                               }
                               return Container(
-                                width: 380,
+                                width: 768,
                                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: Column(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    AvailableReviewWidget(summaryProvider: summaryProvider),
-                                    const SizedBox(height: 12),
-                                    AdvanceReviewWidget(summaryProvider: summaryProvider),
-                                    const SizedBox(height: 12),
-                                    ReviewLevelWidget(user: authProvider.user),
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          AvailableReviewWidget(summaryProvider: summaryProvider),
+                                          const SizedBox(height: 12),
+                                          AdvanceReviewWidget(summaryProvider: summaryProvider),
+                                          const SizedBox(height: 12),
+                                          ReviewLevelWidget(user: authProvider.user),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        children: const [
+                                          HardItemsReviewWidget(),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               );

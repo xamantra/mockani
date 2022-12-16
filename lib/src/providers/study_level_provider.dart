@@ -29,7 +29,7 @@ class StudyLevelProvider extends ReviewProvider {
       subject_types: selectedTypes,
     );
 
-    studySets = sliceListToRows(source: subjectIds..shuffle(), columnCount: 5);
+    studySets = sliceList(source: subjectIds..shuffle(), itemsPerSet: 5);
 
     loading = false;
     updateState();

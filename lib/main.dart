@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
               HOME_ROUTE: (BuildContext _) => const HomeScreen(),
               REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.available),
               ADVANCE_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.advanceReview),
+              HARD_ITEMS_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.hardItemsReview),
               LEVEL_STUDY_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.level),
             },
           );

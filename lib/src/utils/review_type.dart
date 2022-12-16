@@ -5,6 +5,7 @@ enum ReviewType {
   available,
   advanceReview,
   level,
+  hardItemsReview,
 }
 
 String getReviewTypeLabel(ReviewType type, {ReviewProvider? reviewProvider}) {
@@ -22,5 +23,7 @@ String getReviewTypeLabel(ReviewType type, {ReviewProvider? reviewProvider}) {
         return "Study Level ${reviewProvider.selectedLevels.join(', ')} $types".trim();
       }
       return "Level Review";
+    case ReviewType.hardItemsReview:
+      return "Review Hard Items";
   }
 }

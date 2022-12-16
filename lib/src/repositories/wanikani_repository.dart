@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import "package:http/http.dart" as http;
 import 'package:mockani/src/constants/keys.dart';
+import 'package:mockani/src/data/review_stats.dart';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/data/summary.dart';
 import 'package:mockani/src/data/user.dart';
@@ -106,6 +107,48 @@ class WanikaniRepository {
       final list = jsonDecode(response.body)["data"] as List;
       final ids = list.map((item) => item["data"]["subject_id"] as int).toList();
       return ids;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<SubjectData>> getHardItems({
+    String? next,
+    List<ReviewStat> currentResults = const [],
+    int percentLessThan = 90,
+    int count = 30,
+  }) async {
+    try {
+      var results = List<ReviewStat>.from(currentResults);
+
+      final wanikaniToken = _token ?? await getString(WANIKANI_TOKEN);
+      final response = await http.get(
+        Uri.parse(next ?? "https://api.wanikani.com/v2/review_statistics?percentages_less_than=$percentLessThan"),
+        headers: {
+          "Authorization": "Bearer $wanikaniToken",
+        },
+      );
+
+      final reviewStatistics = ReviewStatistics.fromJson(response.body);
+      final newResults = reviewStatistics.data.map((e) => e.data).toList();
+      if (newResults.isNotEmpty) {
+        results.addAll(newResults);
+      }
+
+      if (reviewStatistics.pages.next_url != null) {
+        return await getHardItems(
+          next: reviewStatistics.pages.next_url,
+          currentResults: results,
+          percentLessThan: percentLessThan,
+          count: count,
+        );
+      }
+
+      results.sort((a, b) => a.percentage_correct.compareTo(b.percentage_correct));
+      final filterHardItems = results.map((e) => e.subject_id).toList().sublist(0, count.clamp(0, results.length));
+
+      final finalResults = await getSubjects(ids: filterHardItems);
+      return finalResults;
     } catch (e) {
       return [];
     }

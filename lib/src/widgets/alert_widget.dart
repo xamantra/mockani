@@ -16,7 +16,7 @@ class AlertWidget extends StatelessWidget {
     if (alerts.length == 1) {
       return _AlertBadge(color: color, alert: alerts.first);
     } else if (alerts.length > 1) {
-      final rows = sliceListToRows(source: alerts, columnCount: 3);
+      final rows = sliceList(source: alerts, itemsPerSet: 3);
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
