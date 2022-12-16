@@ -110,281 +110,283 @@ class _ReviewScreenState extends State<ReviewScreen> {
           stream: provider.stream,
           builder: (context, snapshot) {
             return Scaffold(
-              body: Builder(
-                builder: (context) {
-                  if (provider.completed || provider.nothingToReview) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Completed mock review",
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                          const SizedBox(height: 36),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
-                            },
-                            child: Text(
-                              "HOME",
-                              style: Theme.of(context).textTheme.bodySmall,
+              body: SafeArea(
+                child: Builder(
+                  builder: (context) {
+                    if (provider.completed || provider.nothingToReview) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Completed mock review",
+                              style: Theme.of(context).textTheme.headline4,
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  if (provider.loading && provider.reviewSubjects.isEmpty) {
-                    return Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          CircularLoading(),
-                          SizedBox(height: 12),
-                          Text(
-                            "Loading more review ...",
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  final item = provider.getCurrent;
-                  if (kDebugMode) {
-                    print(["reviewProvider.getCurrent", item.id]);
-                  }
-                  return Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: theme.getColorFrom(item.object),
+                            const SizedBox(height: 36),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                              },
+                              child: Text(
+                                "HOME",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          ],
                         ),
-                        child: Center(
-                          child: (item.getCharacterImage != null)
-                              ? Container(
-                                  height: 256,
-                                  width: 256,
-                                  padding: const EdgeInsets.all(36),
-                                  child: ColorFiltered(
-                                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                                    child: ScalableImageWidget.fromSISource(
-                                      si: ScalableImageSource.fromSvgHttpUrl(
-                                        Uri.parse(
-                                          item.getCharacterImage!.url,
-                                        ),
-                                        currentColor: Colors.white,
-                                      ),
-                                      onLoading: (_) {
-                                        return const CircularLoading(
-                                          color: Colors.white,
-                                          size: 256,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(36),
-                                  child: AutoSizeText(
-                                    item.data.characters,
-                                    maxLines: 1,
-                                    maxFontSize: 128,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 128,
-                                      fontFamily:
-                                          'Hiragino Kaku Gothic Pro", "Meiryo", "Source Han Sans Japanese", "NotoSansCJK", "TakaoPGothic", "Yu Gothic", "ヒラギノ角ゴ Pro W3", "メイリオ", "Osaka", "MS PGothic", "ＭＳ Ｐゴシック", "Noto Sans JP", "PingFang SC", "Noto Sans SC", sans-serif',
-                                    ),
-                                  ),
-                                ),
+                      );
+                    }
+                    if (provider.loading && provider.reviewSubjects.isEmpty) {
+                      return Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            CircularLoading(),
+                            SizedBox(height: 12),
+                            Text(
+                              "Loading more review ...",
+                            ),
+                          ],
                         ),
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: Stack(
-                            children: [
-                              Column(
-                                children: [
-                                  SizedBox(height: answers.isEmpty ? 0 : 24),
-                                  answers.isEmpty
-                                      ? const SizedBox()
-                                      : Text(
-                                          "Incorrect",
-                                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                color: theme.danger,
-                                              ),
+                      );
+                    }
+                    final item = provider.getCurrent;
+                    if (kDebugMode) {
+                      print(["reviewProvider.getCurrent", item.id]);
+                    }
+                    return Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: theme.getColorFrom(item.object),
+                          ),
+                          child: Center(
+                            child: (item.getCharacterImage != null)
+                                ? Container(
+                                    height: 256,
+                                    width: 256,
+                                    padding: const EdgeInsets.all(36),
+                                    child: ColorFiltered(
+                                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                                      child: ScalableImageWidget.fromSISource(
+                                        si: ScalableImageSource.fromSvgHttpUrl(
+                                          Uri.parse(
+                                            item.getCharacterImage!.url,
+                                          ),
+                                          currentColor: Colors.white,
                                         ),
-                                  const SizedBox(height: 24),
-                                  Theme(
-                                    data: Theme.of(context).copyWith(
-                                      textSelectionTheme: TextSelectionThemeData(
-                                        selectionColor: theme.getColorFrom(item.object).withOpacity(0.8),
+                                        onLoading: (_) {
+                                          return const CircularLoading(
+                                            color: Colors.white,
+                                            size: 256,
+                                          );
+                                        },
                                       ),
                                     ),
-                                    child: AutoSizeTextField(
-                                      controller: inputController,
-                                      focusNode: focusNode,
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(36),
+                                    child: AutoSizeText(
+                                      item.data.characters,
                                       maxLines: 1,
-                                      minLines: 1,
-                                      maxFontSize: 48,
-                                      textAlign: TextAlign.center,
-                                      textAlignVertical: TextAlignVertical.center,
-                                      decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                                        border: InputBorder.none,
-                                        hintText: item.isRadical
-                                            ? "Radical Name"
-                                            : answerMeaning
-                                                ? "Meaning"
-                                                : "Reading",
-                                        hintStyle: TextStyle(
-                                          color: theme.onBackground.withOpacity(0.3),
+                                      maxFontSize: 128,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 128,
+                                        fontFamily:
+                                            'Hiragino Kaku Gothic Pro", "Meiryo", "Source Han Sans Japanese", "NotoSansCJK", "TakaoPGothic", "Yu Gothic", "ヒラギノ角ゴ Pro W3", "メイリオ", "Osaka", "MS PGothic", "ＭＳ Ｐゴシック", "Noto Sans JP", "PingFang SC", "Noto Sans SC", sans-serif',
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: Stack(
+                              children: [
+                                Column(
+                                  children: [
+                                    SizedBox(height: answers.isEmpty ? 0 : 24),
+                                    answers.isEmpty
+                                        ? const SizedBox()
+                                        : Text(
+                                            "Incorrect",
+                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                  color: theme.danger,
+                                                ),
+                                          ),
+                                    const SizedBox(height: 24),
+                                    Theme(
+                                      data: Theme.of(context).copyWith(
+                                        textSelectionTheme: TextSelectionThemeData(
+                                          selectionColor: theme.getColorFrom(item.object).withOpacity(0.8),
+                                        ),
+                                      ),
+                                      child: AutoSizeTextField(
+                                        controller: inputController,
+                                        focusNode: focusNode,
+                                        maxLines: 1,
+                                        minLines: 1,
+                                        maxFontSize: 48,
+                                        textAlign: TextAlign.center,
+                                        textAlignVertical: TextAlignVertical.center,
+                                        decoration: InputDecoration(
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                                          border: InputBorder.none,
+                                          hintText: item.isRadical
+                                              ? "Radical Name"
+                                              : answerMeaning
+                                                  ? "Meaning"
+                                                  : "Reading",
+                                          hintStyle: TextStyle(
+                                            color: theme.onBackground.withOpacity(0.3),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 48,
+                                          ),
+                                        ),
+                                        style: TextStyle(
+                                          color: theme.onBackground,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 48,
                                         ),
-                                      ),
-                                      style: TextStyle(
-                                        color: theme.onBackground,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 48,
-                                      ),
-                                      cursorColor: theme.getColorFrom(item.object),
-                                      onSubmitted: (value) {
-                                        if (value.trim().isNotEmpty) {
-                                          submit(item, value.trim());
-                                        }
-                                        focusNode.requestFocus();
-                                      },
-                                      // onSaved: (value) {
-                                      //   if (value != null && value.trim().isNotEmpty) {
-                                      //     submit(item, value.trim());
-                                      //   }
-                                      //   focusNode.requestFocus();
-                                      // },
-                                      onChanged: (value) {
-                                        if (!answerMeaning) {
-                                          if (item.isRadical) return;
-                                          if (isDoubleNN(value)) {
-                                            inputController.text = toHiragana(value.substring(0, value.length - 1));
-                                            inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
-                                          } else {
-                                            if (value.isNotEmpty && value[value.length - 1] == "n") return;
-                                            if (startsOrEndsWith(value, "ny")) return;
-                                            inputController.text = toHiragana(value);
-                                            inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
+                                        cursorColor: theme.getColorFrom(item.object),
+                                        onSubmitted: (value) {
+                                          if (value.trim().isNotEmpty) {
+                                            submit(item, value.trim());
                                           }
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 24),
-                                    child: Builder(
-                                      builder: (context) {
-                                        var alerts = <String>[];
-                                        if (error != null) {
-                                          alerts.add(error!);
-                                        } else if (warning != null) {
-                                          alerts.add(warning!);
-                                        } else if (answers.isNotEmpty) {
-                                          alerts.addAll(answers);
-                                        }
-                                        return AlertWidget(
-                                          color: theme.getColorFrom(item.object),
-                                          alerts: alerts,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      child: const AbsorbPointer(
-                                        child: SizedBox(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        focusNode.requestFocus();
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: ReviewCounter(
-                                  totalCount: provider.reviewIds.length,
-                                  reviewedCount: provider.results.length,
-                                  correctCount: provider.results.values.where((correct) => correct).length,
-                                  incorrectCount: provider.results.values.where((correct) => !correct).length,
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 18),
-                                  child: Text(
-                                    getReviewTypeLabel(widget.reviewType, reviewProvider: reviewProvider),
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          themeProvider.switchTheme();
+                                          focusNode.requestFocus();
                                         },
-                                        tooltip: "Switch theme",
-                                        icon: StreamBuilder(
-                                          stream: themeProvider.stream,
-                                          builder: (context, snapshot) {
-                                            return Icon(
-                                              themeProvider.darkMode ? Icons.dark_mode : Icons.light_mode,
-                                              size: 18,
-                                              color: theme.onBackground,
-                                            );
-                                          },
-                                        ),
+                                        // onSaved: (value) {
+                                        //   if (value != null && value.trim().isNotEmpty) {
+                                        //     submit(item, value.trim());
+                                        //   }
+                                        //   focusNode.requestFocus();
+                                        // },
+                                        onChanged: (value) {
+                                          if (!answerMeaning) {
+                                            if (item.isRadical) return;
+                                            if (isDoubleNN(value)) {
+                                              inputController.text = toHiragana(value.substring(0, value.length - 1));
+                                              inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
+                                            } else {
+                                              if (value.isNotEmpty && value[value.length - 1] == "n") return;
+                                              if (startsOrEndsWith(value, "ny")) return;
+                                              inputController.text = toHiragana(value);
+                                              inputController.selection = TextSelection.fromPosition(TextPosition(offset: inputController.text.length));
+                                            }
+                                          }
+                                        },
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(vertical: 24),
+                                      child: Builder(
+                                        builder: (context) {
+                                          var alerts = <String>[];
+                                          if (error != null) {
+                                            alerts.add(error!);
+                                          } else if (warning != null) {
+                                            alerts.add(warning!);
+                                          } else if (answers.isNotEmpty) {
+                                            alerts.addAll(answers);
+                                          }
+                                          return AlertWidget(
+                                            color: theme.getColorFrom(item.object),
+                                            alerts: alerts,
+                                          );
                                         },
-                                        tooltip: "Back home",
-                                        icon: Icon(
-                                          Icons.home,
-                                          size: 18,
-                                          color: theme.onBackground,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        child: const AbsorbPointer(
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
                                         ),
+                                        onTap: () {
+                                          focusNode.requestFocus();
+                                        },
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: ReviewCounter(
+                                    totalCount: provider.reviewIds.length,
+                                    reviewedCount: provider.results.length,
+                                    correctCount: provider.results.values.where((correct) => correct).length,
+                                    incorrectCount: provider.results.values.where((correct) => !correct).length,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 18),
+                                    child: Text(
+                                      getReviewTypeLabel(widget.reviewType, reviewProvider: reviewProvider),
+                                      style: Theme.of(context).textTheme.caption,
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            themeProvider.switchTheme();
+                                          },
+                                          tooltip: "Switch theme",
+                                          icon: StreamBuilder(
+                                            stream: themeProvider.stream,
+                                            builder: (context, snapshot) {
+                                              return Icon(
+                                                themeProvider.darkMode ? Icons.dark_mode : Icons.light_mode,
+                                                size: 18,
+                                                color: theme.onBackground,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+                                          },
+                                          tooltip: "Back home",
+                                          icon: Icon(
+                                            Icons.home,
+                                            size: 18,
+                                            color: theme.onBackground,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
             );
           },

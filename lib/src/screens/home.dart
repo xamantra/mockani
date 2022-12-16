@@ -49,75 +49,77 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: authProvider.stream,
-        builder: (context, snapshot) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: ProfileWidget(user: authProvider.user),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: StreamBuilder(
-                          stream: summaryProvider.stream,
-                          builder: (context, snapshot) {
-                            if (summaryProvider.loading) {
-                              return const CircularLoading();
-                            }
-                            return Container(
-                              width: 380,
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
-                              child: Column(
-                                children: [
-                                  AvailableReviewWidget(summaryProvider: summaryProvider),
-                                  const SizedBox(height: 12),
-                                  AdvanceReviewWidget(summaryProvider: summaryProvider),
-                                  const SizedBox(height: 12),
-                                  ReviewLevelWidget(user: authProvider.user),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: IconButton(
-                            onPressed: () {
-                              themeProvider.switchTheme();
+      body: SafeArea(
+        child: StreamBuilder(
+          stream: authProvider.stream,
+          builder: (context, snapshot) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: ProfileWidget(user: authProvider.user),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: StreamBuilder(
+                            stream: summaryProvider.stream,
+                            builder: (context, snapshot) {
+                              if (summaryProvider.loading) {
+                                return const CircularLoading();
+                              }
+                              return Container(
+                                width: 380,
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
+                                child: Column(
+                                  children: [
+                                    AvailableReviewWidget(summaryProvider: summaryProvider),
+                                    const SizedBox(height: 12),
+                                    AdvanceReviewWidget(summaryProvider: summaryProvider),
+                                    const SizedBox(height: 12),
+                                    ReviewLevelWidget(user: authProvider.user),
+                                  ],
+                                ),
+                              );
                             },
-                            tooltip: "Switch theme",
-                            icon: StreamBuilder(
-                              stream: themeProvider.stream,
-                              builder: (context, snapshot) {
-                                return Icon(
-                                  themeProvider.darkMode ? Icons.dark_mode : Icons.light_mode,
-                                  size: 18,
-                                  color: theme.onBackground,
-                                );
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: IconButton(
+                              onPressed: () {
+                                themeProvider.switchTheme();
                               },
+                              tooltip: "Switch theme",
+                              icon: StreamBuilder(
+                                stream: themeProvider.stream,
+                                builder: (context, snapshot) {
+                                  return Icon(
+                                    themeProvider.darkMode ? Icons.dark_mode : Icons.light_mode,
+                                    size: 18,
+                                    color: theme.onBackground,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
