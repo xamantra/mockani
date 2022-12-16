@@ -11,7 +11,7 @@ class ReviewHardItemsProvider extends ReviewProvider {
     loading = true;
     updateState();
 
-    final subjectIds = await repository.getHardItems();
+    final subjectIds = await repository.getHardItems(percentLessThan: 100);
 
     loading = false;
     updateState();
