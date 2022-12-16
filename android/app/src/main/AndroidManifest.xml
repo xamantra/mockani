@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mockani">
+    package="dev.xamantra.mockani">
    <application
         android:label="mockani"
         android:name="${applicationName}"
