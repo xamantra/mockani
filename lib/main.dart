@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/home_review_provider.dart';
+import 'package:mockani/src/providers/pointers_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
 import 'package:mockani/src/screens/home.dart';
 import 'package:mockani/src/screens/login.dart';
 import 'package:mockani/src/screens/review.dart';
+import 'package:mockani/src/screens/review_pointers.dart';
 import 'package:mockani/src/utils/review_type.dart';
 import 'package:mockani/src/utils/theme.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => AuthProvider(wanikaniRepository)),
         Provider(create: (_) => SummaryProvider(wanikaniRepository)),
         Provider(create: (_) => HomeReviewProvider()),
+        Provider(create: (_) => PointersProvider(wanikaniRepository)),
       ],
       child: StreamBuilder(
         stream: themeProvider.stream,
@@ -70,6 +73,7 @@ class MyApp extends StatelessWidget {
               LOGIN_ROUTE: (BuildContext _) => const LoginScreen(),
               HOME_ROUTE: (BuildContext _) => const HomeScreen(),
               REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.available),
+              POINTERS_ROUTE: (BuildContext _) => const ReviewPointers(),
               ADVANCE_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.advanceReview),
               HARD_ITEMS_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.hardItemsReview),
               LEVEL_STUDY_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.level),

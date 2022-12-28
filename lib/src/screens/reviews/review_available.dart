@@ -54,9 +54,17 @@ class AvailableReviewWidget extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      "available now",
-                      style: Theme.of(context).textTheme.caption,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, POINTERS_ROUTE);
+                      },
+                      child: Text(
+                        "check pointers",
+                        style: Theme.of(context).textTheme.caption?.copyWith(
+                              color: theme.radical,
+                              decoration: TextDecoration.underline,
+                            ),
+                      ),
                     ),
                   ],
                 ),

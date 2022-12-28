@@ -19,6 +19,7 @@ import 'package:mockani/src/utils/kana_kit.dart';
 import 'package:mockani/src/utils/review_type.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
 import 'package:mockani/src/widgets/alert_widget.dart';
+import 'package:mockani/src/widgets/character.dart';
 import 'package:mockani/src/widgets/circular_loading.dart';
 import 'package:mockani/src/widgets/review_counter.dart';
 import 'package:provider/provider.dart';
@@ -171,43 +172,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             color: theme.getColorFrom(item.object),
                           ),
                           child: Center(
-                            child: (item.getCharacterImage != null)
-                                ? Container(
-                                    height: 256,
-                                    width: 256,
-                                    padding: const EdgeInsets.all(36),
-                                    child: ColorFiltered(
-                                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                                      child: ScalableImageWidget.fromSISource(
-                                        si: ScalableImageSource.fromSvgHttpUrl(
-                                          Uri.parse(
-                                            item.getCharacterImage!.url,
-                                          ),
-                                          currentColor: Colors.white,
-                                        ),
-                                        onLoading: (_) {
-                                          return const CircularLoading(
-                                            color: Colors.white,
-                                            size: 256,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.all(36),
-                                    child: AutoSizeText(
-                                      item.data.characters,
-                                      maxLines: 1,
-                                      maxFontSize: 128,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 128,
-                                        fontFamily: "Hiragino",
-                                      ),
-                                    ),
-                                  ),
+                            child: Character(item: item),
                           ),
                         ),
                         Expanded(

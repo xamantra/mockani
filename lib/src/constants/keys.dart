@@ -6,6 +6,7 @@ const WANIKANI_TOKEN = "WANIKANI_TOKEN";
 const LOGIN_ROUTE = "/";
 const HOME_ROUTE = "/home";
 const REVIEW_ROUTE = "/review";
+const POINTERS_ROUTE = "/review-pointers";
 const ADVANCE_REVIEW_ROUTE = "/advance-review";
 const HARD_ITEMS_REVIEW_ROUTE = "/hard-items-review";
 const LEVEL_STUDY_ROUTE = "/level-study";

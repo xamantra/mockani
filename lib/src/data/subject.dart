@@ -144,6 +144,14 @@ class SubjectData {
 
   bool get isRadical => object == "radical";
 
+  List<String> get getPrimaryMeanings {
+    return data.meanings.where((element) => element.primary).map((e) => e.meaning).toList();
+  }
+
+  List<String> get getPrimaryReadings {
+    return data.readings.where((element) => element.primary).map((e) => e.reading).toList();
+  }
+
   SubjectData({
     required this.id,
     required this.object,
