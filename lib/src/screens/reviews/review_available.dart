@@ -13,6 +13,7 @@ class AvailableReviewWidget extends StatelessWidget {
   final SummaryProvider summaryProvider;
 
   int get availableReview => summaryProvider.getAvailableReviews.length;
+  bool get noAvailable => availableReview == 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +50,28 @@ class AvailableReviewWidget extends StatelessWidget {
                             ? const SizedBox()
                             : Icon(
                                 Icons.keyboard_arrow_right,
-                                color: theme.radical.withOpacity(availableReview == 0 ? 0.3 : 1),
+                                color: theme.radical.withOpacity(noAvailable ? 0.3 : 1),
                               ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, POINTERS_ROUTE);
-                      },
-                      child: Text(
-                        "check pointers",
-                        style: Theme.of(context).textTheme.caption?.copyWith(
-                              color: theme.radical,
-                              decoration: TextDecoration.underline,
+                    noAvailable
+                        ? Text(
+                            "No reviews",
+                            style: Theme.of(context).textTheme.caption,
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, POINTERS_ROUTE);
+                            },
+                            child: Text(
+                              "check pointers",
+                              style: Theme.of(context).textTheme.caption?.copyWith(
+                                    color: theme.radical,
+                                    decoration: TextDecoration.underline,
+                                  ),
                             ),
-                      ),
-                    ),
+                          ),
                   ],
                 ),
               ),
@@ -74,7 +80,7 @@ class AvailableReviewWidget extends StatelessWidget {
               isVerySmall
                   ? const SizedBox()
                   : ElevatedButton(
-                      onPressed: availableReview == 0
+                      onPressed: noAvailable
                           ? null
                           : () {
                               Navigator.pushNamed(context, REVIEW_ROUTE);
