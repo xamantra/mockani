@@ -1,10 +1,8 @@
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jovial_svg/jovial_svg.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/data/subject.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
