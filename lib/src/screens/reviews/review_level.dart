@@ -34,7 +34,7 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
             : () {
                 showDialog<List<String>>(
                   context: context,
-                  barrierDismissible: false,
+                  barrierDismissible: true,
                   builder: (_) => _TypeSelectionDialog(
                     levels: [widget.user.data.level],
                     selectedTypes: selectedTypes,
@@ -86,7 +86,7 @@ class _ReviewLevelWidgetState extends State<ReviewLevelWidget> {
                       onPressed: () {
                         showDialog<List<String>>(
                           context: context,
-                          barrierDismissible: false,
+                          barrierDismissible: true,
                           builder: (_) => _TypeSelectionDialog(
                             levels: [widget.user.data.level],
                             selectedTypes: selectedTypes,
@@ -142,9 +142,20 @@ class _TypeSelectionDialogState extends State<_TypeSelectionDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "Study Level ${widget.levels.join(', ')}",
-              style: Theme.of(context).textTheme.titleMedium,
+            Row(
+              children: [
+                Text(
+                  "Study Level ${widget.levels.join(', ')}",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ],
             ),
             const SizedBox(height: 24),
             CheckboxListTile(
