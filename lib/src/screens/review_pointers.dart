@@ -43,122 +43,127 @@ class _ReviewPointersState extends State<ReviewPointers> {
           padding: const EdgeInsets.all(32),
           child: Stack(
             children: [
-              StreamBuilder(
-                stream: provider.stream,
-                builder: (context, snapshot) {
-                  if (provider.loading) {
+              Padding(
+                padding: const EdgeInsets.only(top: 32),
+                child: StreamBuilder(
+                  stream: provider.stream,
+                  builder: (context, snapshot) {
+                    if (provider.loading) {
+                      return Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            CircularLoading(),
+                            SizedBox(height: 12),
+                            Text(
+                              "Loading subjects ...",
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    final grouped = groupBy(provider.reviewSubjects, (v) => v.object);
+
                     return Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          CircularLoading(),
-                          SizedBox(height: 12),
-                          Text(
-                            "Loading subjects ...",
-                          ),
-                        ],
-                      ),
-                    );
-                  }
+                      child: SizedBox(
+                        width: 1280,
+                        child: ListView.builder(
+                          itemCount: grouped.keys.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final g = grouped.keys.toList()[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 48),
+                              child: Center(
+                                child: Builder(
+                                  builder: (context) {
+                                    final subjects = sliceList(source: grouped[g]!, itemsPerSet: 5);
 
-                  final grouped = groupBy(provider.reviewSubjects, (v) => v.object);
-
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: grouped.keys
-                            .map(
-                              (e) => Padding(
-                                padding: const EdgeInsets.only(bottom: 48),
-                                child: Center(
-                                  child: Builder(
-                                    builder: (context) {
-                                      final subjects = sliceList(source: grouped[e]!, itemsPerSet: 5);
-
-                                      return Column(
-                                        children: subjects
-                                            .map(
-                                              (items) => Padding(
-                                                padding: const EdgeInsets.only(bottom: 24),
-                                                child: SeparatedList(
-                                                  separator: const SizedBox(width: 12),
-                                                  builder: (context, children) {
-                                                    return Row(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: children,
-                                                    );
-                                                  },
-                                                  children: items
-                                                      .map((s) => SizedBox(
-                                                            height: 240,
-                                                            width: 240,
-                                                            child: MouseRegion(
-                                                              onEnter: (event) {
-                                                                setState(() {
-                                                                  hovering = s;
-                                                                });
-                                                              },
-                                                              onExit: (event) {
-                                                                setState(() {
-                                                                  hovering = null;
-                                                                });
-                                                              },
-                                                              child: Card(
-                                                                elevation: 0,
-                                                                color: theme.getColorFrom(s.object),
-                                                                child: Center(
-                                                                  child: Column(
-                                                                    children: [
-                                                                      const Spacer(),
-                                                                      Character(
-                                                                        item: s,
-                                                                        size: 128,
-                                                                      ),
-                                                                      const Spacer(),
-                                                                      AnimatedOpacity(
-                                                                        opacity: isHoveringItem(s) ? 1 : 0,
-                                                                        duration: const Duration(milliseconds: 300),
-                                                                        child: Text(
-                                                                          s.getPrimaryReadings.join(", "),
-                                                                          style: Theme.of(context).textTheme.titleMedium,
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(height: 8),
-                                                                      AnimatedOpacity(
-                                                                        opacity: isHoveringItem(s) ? 1 : 0,
-                                                                        duration: const Duration(milliseconds: 300),
-                                                                        child: Text(
-                                                                          s.getPrimaryMeanings.join(", "),
-                                                                          style: Theme.of(context).textTheme.titleMedium,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                    return ListView.builder(
+                                      itemCount: subjects.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, j) {
+                                        final items = subjects[j];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(bottom: 24),
+                                          child: SeparatedList(
+                                            separator: const SizedBox(width: 12),
+                                            builder: (context, children) {
+                                              return Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: children,
+                                              );
+                                            },
+                                            children: items
+                                                .map(
+                                                  (s) => SizedBox(
+                                                    height: 240,
+                                                    width: 240,
+                                                    child: MouseRegion(
+                                                      onEnter: (event) {
+                                                        setState(() {
+                                                          hovering = s;
+                                                        });
+                                                      },
+                                                      onExit: (event) {
+                                                        setState(() {
+                                                          hovering = null;
+                                                        });
+                                                      },
+                                                      child: Card(
+                                                        elevation: 0,
+                                                        color: theme.getColorFrom(s.object),
+                                                        child: Center(
+                                                          child: Column(
+                                                            children: [
+                                                              const Spacer(),
+                                                              Character(
+                                                                item: s,
+                                                                size: 128,
+                                                              ),
+                                                              const Spacer(),
+                                                              AnimatedOpacity(
+                                                                opacity: isHoveringItem(s) ? 1 : 0,
+                                                                duration: const Duration(milliseconds: 300),
+                                                                child: Text(
+                                                                  s.getPrimaryReadings.join(", "),
+                                                                  style: Theme.of(context).textTheme.titleMedium,
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ))
-                                                      .toList(),
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                      );
-                                    },
-                                  ),
+                                                              const SizedBox(height: 8),
+                                                              AnimatedOpacity(
+                                                                opacity: isHoveringItem(s) ? 1 : 0,
+                                                                duration: const Duration(milliseconds: 300),
+                                                                child: Text(
+                                                                  s.getPrimaryMeanings.join(", "),
+                                                                  style: Theme.of(context).textTheme.titleMedium,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ),
-                            )
-                            .toList(),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
               IconButton(
                 onPressed: () {
