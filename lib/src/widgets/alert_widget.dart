@@ -14,7 +14,7 @@ class AlertWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (alerts.length == 1) {
-      return _AlertBadge(color: color, alert: alerts.first);
+      return BadgeWidget(color: color, text: alerts.first);
     } else if (alerts.length > 1) {
       final rows = sliceList(source: alerts, itemsPerSet: 3);
       return Column(
@@ -29,7 +29,7 @@ class AlertWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: row
                     .map(
-                      (alert) => _AlertBadge(color: color, alert: alert),
+                      (alert) => BadgeWidget(color: color, text: alert),
                     )
                     .toList(),
               ),
@@ -42,29 +42,43 @@ class AlertWidget extends StatelessWidget {
   }
 }
 
-class _AlertBadge extends StatelessWidget {
-  const _AlertBadge({
+class BadgeWidget extends StatelessWidget {
+  const BadgeWidget({
+    super.key,
     required this.color,
-    required this.alert,
+    required this.text,
+    this.textColor,
+    this.padding,
+    this.onTap,
   });
 
   final Color color;
-  final String alert;
+  final String text;
+  final Color? textColor;
+  final EdgeInsetsGeometry? padding;
+  final void Function(String value)? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(4),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        alert,
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.white,
-            ),
+    return GestureDetector(
+      onTap: () {
+        if (onTap != null) {
+          onTap!(text);
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.all(4),
+        padding: padding ?? const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: textColor ?? Colors.white,
+              ),
+        ),
       ),
     );
   }

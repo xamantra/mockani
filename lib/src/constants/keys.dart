@@ -10,3 +10,4 @@ const POINTERS_ROUTE = "/review-pointers";
 const ADVANCE_REVIEW_ROUTE = "/advance-review";
 const HARD_ITEMS_REVIEW_ROUTE = "/hard-items-review";
 const LEVEL_STUDY_ROUTE = "/level-study";
+const GENERATE_NAME = "/generate-name";

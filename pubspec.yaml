@@ -39,3 +39,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Hiragino.otf
           style: normal
+
+assets:
+
+  - assets/kanjiapi/kanjiapi_data.json

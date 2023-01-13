@@ -6,6 +6,10 @@ String toHiragana(String romaji) {
   return kana.toHiragana(romaji);
 }
 
+String toRomaji(String k) {
+  return kana.toRomaji(k);
+}
+
 /// Mixed with kana and romaji
 bool isInputMixed(String value) {
   return kana.isMixed(value);

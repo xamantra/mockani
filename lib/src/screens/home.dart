@@ -5,6 +5,7 @@ import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/screens/reviews/review_hard_items.dart';
 import 'package:mockani/src/screens/reviews/review_level.dart';
+import 'package:mockani/src/screens/widgets/name_generator.dart';
 import 'package:mockani/src/utils/array_slice.dart';
 import 'package:mockani/src/utils/responsive.dart';
 import 'package:mockani/src/utils/theme_extension.dart';
@@ -84,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 AdvanceReviewWidget(summaryProvider: summaryProvider),
                                 ReviewLevelWidget(user: authProvider.user),
                                 const HardItemsReviewWidget(),
+                                const NameGeneratorWidget(),
                                 // add more review types here.
                               ], itemsPerSet: 2);
 

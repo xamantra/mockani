@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mockani/src/constants/keys.dart';
 import 'package:mockani/src/providers/auth_provider.dart';
 import 'package:mockani/src/providers/home_review_provider.dart';
+import 'package:mockani/src/providers/name_generator_provider.dart';
 import 'package:mockani/src/providers/pointers_provider.dart';
 import 'package:mockani/src/providers/summary_provider.dart';
 import 'package:mockani/src/providers/theme_provider.dart';
 import 'package:mockani/src/repositories/wanikani_repository.dart';
+import 'package:mockani/src/screens/name_generator/generate_name.dart';
 import 'package:mockani/src/screens/home.dart';
 import 'package:mockani/src/screens/login.dart';
 import 'package:mockani/src/screens/review.dart';
 import 'package:mockani/src/screens/review_pointers.dart';
 import 'package:mockani/src/utils/review_type.dart';
 import 'package:mockani/src/utils/theme.dart';
+import 'package:mockani/src/widgets/scroll_behavior.dart';
 import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
 
@@ -35,6 +38,7 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => SummaryProvider(wanikaniRepository)),
         Provider(create: (_) => HomeReviewProvider()),
         Provider(create: (_) => PointersProvider(wanikaniRepository)),
+        Provider(create: (_) => NameGeneratorProvider()),
       ],
       child: StreamBuilder(
         stream: themeProvider.stream,
@@ -69,6 +73,7 @@ class MyApp extends StatelessWidget {
               extensions: [darkTheme],
             ),
             debugShowCheckedModeBanner: false,
+            scrollBehavior: MyCustomScrollBehavior(),
             routes: {
               LOGIN_ROUTE: (BuildContext _) => const LoginScreen(),
               HOME_ROUTE: (BuildContext _) => const HomeScreen(),
@@ -77,6 +82,7 @@ class MyApp extends StatelessWidget {
               ADVANCE_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.advanceReview),
               HARD_ITEMS_REVIEW_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.hardItemsReview),
               LEVEL_STUDY_ROUTE: (BuildContext _) => const ReviewScreen(reviewType: ReviewType.level),
+              GENERATE_NAME: (BuildContext _) => const GenerateNameScreen(),
             },
           );
         },
